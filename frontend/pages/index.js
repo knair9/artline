@@ -18,7 +18,7 @@ export default function Home() {
         <input
           type="range"
           id="time-slider"
-          min="1000"
+          min="0"
           max="2024"
           step="1"
           value={year}
