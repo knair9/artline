@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <div style={{ fontFamily: 'sans-serif', padding: '2rem' }}>
-      <h1>🖼️ Art in Time</h1>
+      <h1>🖼️ Art Out of Time</h1>
 
       <div style={{ marginTop: '2rem' }}>
         <label htmlFor="time-slider">
