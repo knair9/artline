@@ -4,12 +4,15 @@
 
     Artifact class to represent each single art object
 """
+from historical_date import HistoricalDate
 
 class Artifact:
 
-    def __init__(self, name, date, description, location, artist, source): 
+    def __init__(self, name, raw_date, description, location, artist, source): 
         self.name = name
-        self.date = date 
+        self.raw_date = raw_date 
+        self.hist_date = HistoricalDate(raw_date)
+        self.tl_year = self.hist_date.get_year()
         self.description = description 
         self.location = location 
         self.artist = artist 
@@ -18,8 +21,14 @@ class Artifact:
     def get_name(self):
         return self.name 
     
-    def get_date(self): 
-        return self.date     
+    def get_raw_date(self): 
+        return self.raw_date
+
+    def get_tl_year(self):
+        return self.tl_year
+    
+    def get_precision(self): 
+        return self.hist_date.get_precision()
 
     def get_description(self):
         return self.description
@@ -32,5 +41,5 @@ class Artifact:
 
     def get_source(self): 
         return self.source
-    
+  
     

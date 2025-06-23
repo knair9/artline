@@ -3,7 +3,7 @@ from artifact import Artifact
 # Example artifact, manually entered for now
 example_artifact = Artifact(
     name="Mona Lisa",
-    date=1503,
+    raw_date="c. 1500s (after 1503, before 1506)",
     description="A portrait of Lisa Gherardini by Leonardo da Vinci.",
     location="Florence, Italy",
     artist="Leonardo da Vinci",
@@ -12,7 +12,7 @@ example_artifact = Artifact(
 
 # Optional: add to a dictionary by year
 artifacts_by_year = {}
-year = example_artifact.get_date()
+year = example_artifact.get_tl_year()
 
 if year not in artifacts_by_year:
     artifacts_by_year[year] = []
