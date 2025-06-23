@@ -16,7 +16,12 @@ export default function Home() {
     setYear(parseInt(e.target.value));
   };
 
-  const shouldShowArtifact = artifact && artifact.date === year;
+  const shouldShowArtifact = artifact && parseInt(artifact.date) === year;
+  
+  if (artifact) {
+    console.log("Slider year value:", year);
+    console.log("Artifact date:", artifact.date);
+  }
 
   return (
     <div style={{ fontFamily: 'sans-serif', padding: '2rem' }}>
