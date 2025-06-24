@@ -39,7 +39,9 @@ class HistoricalDate:
                 self.precision = "circa"
         else: # for all other cases, finds instance of any 1-4 numbers and saves as year: ex: 1527
             match = re.search(r"(\d{1,4})", text)
-            self.year = match.group(1)
+            if match:
+                self.year = int(match.group(1))
+                self.precision = "exact"
             self.precision = "exact"
             
     def get_year(self): 
@@ -52,7 +54,7 @@ class HistoricalDate:
         return self.raw
 
     def __str__(self):
-        pass
+        return f"Raw Date: {self.raw}, Year: {self.year}, Precision:{self.precision}"
     
     
     
