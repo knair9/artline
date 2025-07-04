@@ -1,45 +1,84 @@
 """
     Authors: Harper Noteboom and Kalyani Nair
-    Date:   6/19/2025
+    Date:   7/3/2025
 
     Artifact class to represent each single art object
 """
-from historical_date import HistoricalDate
+
 
 class Artifact:
+    # more documentation on each parameter can be found at https://metmuseum.github.io/#object
 
-    def __init__(self, name, raw_date, description, location, artist, source): 
-        self.name = name
-        self.raw_date = raw_date 
-        self.hist_date = HistoricalDate(raw_date)
-        self.tl_year = self.hist_date.get_year()
-        self.description = description 
-        self.location = location 
-        self.artist = artist 
-        self.source = source 
-    
-    def get_name(self):
-        return self.name 
-    
-    def get_raw_date(self): 
-        return self.raw_date
+    def __init__(self, objectID, objectDate, beginDate, endDate, isHighlight,
+                 isPublicDomain, image, image_small, other_images, department,
+                 objectName, title, culture, period, medium, artist,
+                 met_url):  # add more parameters as needed
 
-    def get_tl_year(self):
-        return self.tl_year
-    
-    def get_precision(self): 
-        return self.hist_date.get_precision()
+        self.objectID = objectID
+        self.objectDate = objectDate
+        self.beginDate = beginDate
+        self.endDate = endDate
+        self.isHighlight = isHighlight
+        self.isPublicDomain = isPublicDomain
+        self.image = image
+        self.image_small = image_small
+        self.other_images = other_images
+        self.department = department
+        self.objectName = objectName
+        self.title = title
+        self.culture = culture
+        self.period = period
+        self.medium = medium
+        self.artist = artist
+        self.met_url = met_url
 
-    def get_description(self):
-        return self.description
-    
-    def get_location(self): 
-        return self.location 
+    def get_objectID(self):
+        return self.objectID
+
+    def get_objectDate(self):
+        return self.objectDate
+
+    def get_beginDate(self):
+        return self.beginDate
+
+    def get_endDate(self):
+        return self.endDate
+
+    def get_isHighlight(self):
+        return self.isHighlight
+
+    def get_isPublicDomain(self):
+        return self.isPublicDomain
+
+    def get_image(self):
+        return self.image
+
+    def get_image_small(self):
+        return self.image_small
+
+    def get_other_images(self):
+        return self.other_images
+
+    def get_department(self):
+        return self.department
+
+    def get_objectName(self):
+        return self.objectName
+
+    def get_title(self):
+        return self.title
+
+    def get_culture(self):
+        return self.culture
+
+    def get_period(self):
+        return self.period
+
+    def get_medium(self):
+        return self.medium
 
     def get_artist(self):
         return self.artist
 
-    def get_source(self): 
-        return self.source
-  
-    
+    def get_met_url(self):
+        return self.met_url
