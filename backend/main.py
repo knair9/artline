@@ -16,71 +16,33 @@ from artifact import Artifact
 
 # # Example artifact, manually entered for now
 # @app.get("/api/artifacts")
-def get_artifact():
-    # Create your artifact object
-    mona_lisa = Artifact(
-        name="Mona Lisa",
-        date=1503,
-        description="A portrait of Lisa Gherardini by Leonardo da Vinci.",
-        location="FlorenceAOFHDF, Italy",
-        artist="Leonardo da Vinci",
-        source="")
-    # Return artifact info as JSON
-    return {
-        "name": mona_lisa.get_name(),
-        "date": mona_lisa.get_date(),
-        "description": mona_lisa.get_description(),
-        "location": mona_lisa.get_location(),
-        "artist": mona_lisa.get_artist(),
-        "source": mona_lisa.get_source()
-    }
-
-
-# Example artifact, manually entered for now
-example_artifact = Artifact(
-    name="Mona Lisa",
-    raw_date="c. 1500s (after 1503, before 1506)",
-    description="A portrait of Lisa Gherardini by Leonardo da Vinci.",
-    location="FlorenceAOFHDNG, Italy",
-    artist="Leonardo da Vinci",
-    source="https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg")
-
-# Optional: add to a dictionary by year
-artifacts_by_year = {}
-year = example_artifact.get_tl_year()
-
-if year not in artifacts_by_year:
-    artifacts_by_year[year] = []
-
-artifacts_by_year[year].append(example_artifact)
-
-# Print the artifact to confirm
-print(f"Artifact for {year}:")
-for a in artifacts_by_year[year]:
-    print(f"- {a.get_name()} by {a.get_artist()} ({a.get_location()})")
-
-
-
-
-# example_artifact = Artifact(
-#     name="Mona Lisa",
-#     raw_date="c. 1500s (after 1503, before 1506)",
-#     description="A portrait of Lisa Gherardini by Leonardo da Vinci.",
-#     location="Florence, Italy",
-#     artist="Leonardo da Vinci",
-#     source="https://commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg"
-# )
-
-# # Optional: add to a dictionary by year
-# artifacts_by_year = {}
-# year = example_artifact.get_tl_year()
-
-# if year not in artifacts_by_year:
-#     artifacts_by_year[year] = []
-
-# artifacts_by_year[year].append(example_artifact)
-
-# # Print the artifact to confirm
-# print(f"Artifact for {year}:")
-# for a in artifacts_by_year[year]:
-#     print(f"- {a.get_name()} by {a.get_artist()} ({a.get_location()})")
+def get_artifacts(
+    start: int = Query(..., description="user start year"),
+    end: int = Query(..., description="user end year")
+):
+    artifacts = get_artifacts_range(start, end)
+    artifact_list = []
+    if artifacts:
+        for artifact in artifacts:
+            if artifact.get_image():
+                artifact_data = {
+                    "objectID": artifact.get_objectID(),
+                    "objectDate": artifact.get_objectDate(),
+                    "beginDate": artifact.get_beginDate(),
+                    "endDate": artifact.get_endDate(),
+                    "isHighlight": artifact.get_isHighlight(),
+                    "isPublicDomain": artifact.get_isPublicDomain(),
+                    "image": artifact.get_image(),
+                    "image_small": artifact.get_image_small(),
+                    "other_images": artifact.get_other_images(),
+                    "department": artifact.get_department(),
+                    "objectName": artifact.get_objectName(),
+                    "title": artifact.get_title(),
+                    "culture": artifact.get_culture(),
+                    "period": artifact.get_period(),
+                    "medium": artifact.get_medium(),
+                    "artist": artifact.get_artist(),
+                    "met_url":artifact.get_met_url()
+                }
+                artifact_list.append(artifact_data)
+    return artifact_list

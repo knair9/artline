@@ -95,7 +95,7 @@ export default function Home() {
   // Fetch artifacts whenever startYear or endYear changes
   useEffect(() => {
     if (startYear > endYear) return; // guard: invalid range
-    fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/${startYear}&end=${endYear}`)
+    fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?${startYear}&end=${endYear}`)
       .then((res) => res.json())
       .then((data) => setArtifacts(data))
       .catch((err) => console.error('Error fetching artifacts:', err));
