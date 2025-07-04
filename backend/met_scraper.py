@@ -57,7 +57,7 @@ def get_artifacts_range(start, end):
       artifact_data = artifact_response.json() #converts data to json
       artifact = convert_met_data_to_artifact(artifact_data) #converts to Artifact
       artifacts.append(artifact)
-      return artifacts
+    return artifacts
   else: 
     #randomly generates the objectIDs of 10 random objects, converts them to Artifacts, and returns as a list
     for i in range(10): 
@@ -68,7 +68,7 @@ def get_artifacts_range(start, end):
       artifact_data = artifact_response.json() #converts data to json 
       artifact = convert_met_data_to_artifact(artifact_data) #converts to Artifact
       artifacts.append(artifact)
-      return artifacts
+    return artifacts
 
 
 def get_artifact_images(list_of_artifacts): 
