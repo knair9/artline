@@ -98,7 +98,7 @@ export default function Home() {
 
   useEffect(() => {
     const [start, end] = range;
-    fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${startYear}&end=${endYear}`)
+    fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}`)
       .then((res) => res.json())
       .then((data) => {
         const urls = data.map((art) => art.image_small);
