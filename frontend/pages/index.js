@@ -85,84 +85,60 @@
 //     </div>
 //   );
 // }
-import { useEffect, useState } from 'react';
+
+import { useState, useEffect } from 'react';
 
 export default function Home() {
-  const [startYear, setStartYear] = useState(1800);
-  const [endYear, setEndYear] = useState(1820);
-  const [artifacts, setArtifacts] = useState([]);
+  const minYear = 0;
+  const maxYear = 2024;
+  const interval = 10;
 
-  // Fetch artifacts whenever startYear or endYear changes
+  const [range, setRange] = useState([2010, 2020]); // default 10-year window
+  const [images, setImages] = useState([]);
+
   useEffect(() => {
-    if (startYear > endYear) return; // guard: invalid range
-    fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?${startYear}&end=${endYear}`)
+    const [start, end] = range;
+    fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${startYear}&end=${endYear}`)
       .then((res) => res.json())
-      .then((data) => setArtifacts(data))
-      .catch((err) => console.error('Error fetching artifacts:', err));
-  }, [startYear, endYear]);
+      .then((data) => {
+        const urls = data.map((art) => art.image_small);
+        setImages(urls);
+      })
+      .catch((err) => console.error('Error fetching:', err));
+  }, [range]);
+
+  const handleChange = (e) => {
+    const newStart = parseInt(e.target.value);
+    const newEnd = newStart + interval;
+
+    if (newEnd <= maxYear) {
+      setRange([newStart, newEnd]);
+    }
+  };
 
   return (
     <div style={{ fontFamily: 'sans-serif', padding: '2rem' }}>
       <h1>🖼️ Art Out of Time</h1>
 
-      {/* Year range sliders */}
       <div style={{ marginTop: '2rem' }}>
-        <div>
-          <label htmlFor="start-year">
-            <strong>Start Year:</strong> {startYear}
-          </label>
-          <input
-            type="range"
-            id="start-year"
-            min="0"
-            max="2024"
-            step="1"
-            value={startYear}
-            onChange={(e) => setStartYear(parseInt(e.target.value))}
-            style={{ width: '100%' }}
-          />
-        </div>
-
-        <div style={{ marginTop: '1rem' }}>
-          <label htmlFor="end-year">
-            <strong>End Year:</strong> {endYear}
-          </label>
-          <input
-            type="range"
-            id="end-year"
-            min="0"
-            max="2024"
-            step="1"
-            value={endYear}
-            onChange={(e) => setEndYear(parseInt(e.target.value))}
-            style={{ width: '100%' }}
-          />
-        </div>
+        <label>
+          <strong>Years:</strong> {range[0]} – {range[1]}
+        </label>
+        <input
+          type="range"
+          min={minYear}
+          max={maxYear - interval}
+          step={1}
+          value={range[0]}
+          onChange={handleChange}
+          style={{ width: '100%' }}
+        />
       </div>
 
-      {/* Display image results */}
-      <div
-        style={{
-          marginTop: '3rem',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-          gap: '1rem',
-        }}
-      >
-        {artifacts.length > 0 ? (
-          artifacts.map((artifact) => (
-            <img
-              key={artifact.objectID}
-              src={artifact.image_small || artifact.image}
-              alt={artifact.title || 'Artifact'}
-              style={{ width: '100%', borderRadius: '8px' }}
-            />
-          ))
-        ) : (
-          <p style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
-            No images found for this year range.
-          </p>
-        )}
+      <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '1rem' }}>
+        {images.map((url, index) => (
+          <img key={index} src={url} alt={`Artifact ${index}`} style={{ width: '100%', height: 'auto', borderRadius: '8px' }} />
+        ))}
       </div>
     </div>
   );
