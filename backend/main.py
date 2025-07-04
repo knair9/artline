@@ -24,7 +24,7 @@ def get_artifact():
         description="A portrait of Lisa Gherardini by Leonardo da Vinci.",
         location="FlorenceAOFHDF, Italy",
         artist="Leonardo da Vinci",
-        source="https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg")
+        source="")
     # Return artifact info as JSON
     return {
         "name": mona_lisa.get_name(),
