@@ -96,16 +96,23 @@ export default function Home() {
   const [range, setRange] = useState([2010, 2020]); // default 10-year window
   const [images, setImages] = useState([]);
 
+  
   useEffect(() => {
     const [start, end] = range;
-    fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const urls = data.map((art) => art.image_small);
-        setImages(urls);
+
+    const delayDebounce = setTimeout(() => {
+      fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}`)
+        .then((res) => res.json())
+        .then((data) => {
+          const urls = data.map((art) => art.image);
+          setImages(urls);
       })
       .catch((err) => console.error('Error fetching:', err));
+    }, 500); // waits 500ms after slider stops
+
+    return () => clearTimeout(delayDebounce); // cancel if slider moves again quickly
   }, [range]);
+  
 
   const handleChange = (e) => {
     const newStart = parseInt(e.target.value);
