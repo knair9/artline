@@ -59,7 +59,9 @@ export default function Home() {
           src={artifact.image}
           alt={artifact.objectID}
           onError={(e) => {
-            console.log(`Failed to load image: ${artifact.image}`);
+            console.log(`Failed to load image for artifact ${artifact.objectID}`);
+            console.log("Full artifact JSON:", JSON.stringify(artifact, null, 2));
+            // console.log(`Failed to load image: ${artifact.objectID}`);
             e.target.src = 'https://eagle-sensors.com/wp-content/uploads/unavailable-image.jpg';
           }}
           style={{
