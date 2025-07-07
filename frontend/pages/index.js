@@ -62,6 +62,13 @@ export default function Home() {
             console.log(`Failed to load image: ${artifact.image}`);
             e.target.src = 'https://eagle-sensors.com/wp-content/uploads/unavailable-image.jpg';
           }}
+          style={{
+            width: 'auto',         // fills the grid cell width
+            height: 'auto',        // keeps aspect ratio
+            maxHeight: '200px',    // cap height to prevent huge images
+            objectFit: 'cover',    // crops excess to fit nicely
+            borderRadius: '8px',   // optional: rounded corners
+          }}
         />
           // <img key={artifact.objectID} src={artifact.image} alt={`Artifact ${artifact.objectID}`} style={{ width: '100%', height: 'auto', borderRadius: '8px' }} />
         ))}
