@@ -86,7 +86,7 @@ export default function Home() {
   const maxYear = 2024;
   const interval = 10;
 
-  const [range, setRange] = useState([2010, 2020]); // default 10-year window
+  const [range, setRange] = useState([2010, 2020]);
   const [artifacts, setArtifacts] = useState([]);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ export default function Home() {
           setArtifacts(data);
         })
         .catch((err) => console.error('Error fetching:', err));
-    }, 500);
+    }, 300); // Slightly shorter debounce
 
     return () => clearTimeout(delayDebounce);
   }, [range]);
@@ -113,31 +113,29 @@ export default function Home() {
     }
   };
 
-  // Split artifacts into top and bottom halves
-  const halfway = Math.ceil(artifacts.length / 2);
-  const topArtifacts = artifacts.slice(0, halfway);
-  const bottomArtifacts = artifacts.slice(halfway);
-
   return (
     <div style={{ backgroundColor: '#f7efe7', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Header Bar */}
+      {/* Thicker Green Header */}
       <header style={{
         backgroundColor: '#45633d',
         color: 'white',
-        padding: '0.75rem 2rem',
-        fontSize: '1rem',
-        fontWeight: 'bold'
+        padding: '1.5rem 2rem',
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        textAlign: 'left'
       }}>
-        Site name
+        Art Out of Time
       </header>
 
-      {/* Main Content */}
-      <main style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '2rem' }}>
-        <h1 style={{ textAlign: 'center', color: '#2e2e2e', fontSize: '1.5rem', marginBottom: '2rem' }}>
-          🖼️ Art Out of Time
-        </h1>
-
-        {/* Top Artifacts */}
+      {/* Main Section Centered Around Timeline */}
+      <main style={{
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}>
+        {/* Top Images */}
         <div style={{
           display: 'flex',
           flexWrap: 'wrap',
@@ -145,7 +143,7 @@ export default function Home() {
           gap: '1rem',
           marginBottom: '3rem'
         }}>
-          {topArtifacts.map((artifact) => (
+          {artifacts.slice(0, Math.ceil(artifacts.length / 2)).map((artifact) => (
             <img
               key={artifact.objectID}
               src={artifact.image}
@@ -155,10 +153,9 @@ export default function Home() {
                 e.target.src = 'https://eagle-sensors.com/wp-content/uploads/unavailable-image.jpg';
               }}
               style={{
-                height: `${100 + Math.random() * 100}px`,
+                height: `${80 + Math.random() * 160}px`,
                 maxWidth: '160px',
                 objectFit: 'cover',
-                borderRadius: '8px',
                 transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 6 - 3}deg)`,
                 boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
               }}
@@ -166,7 +163,7 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Center Timeline Slider */}
+        {/* Center Timeline */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -194,14 +191,14 @@ export default function Home() {
           <span style={{ fontSize: '0.9rem' }}>{range[1]}</span>
         </div>
 
-        {/* Bottom Artifacts */}
+        {/* Bottom Images */}
         <div style={{
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'center',
           gap: '1rem'
         }}>
-          {bottomArtifacts.map((artifact) => (
+          {artifacts.slice(Math.ceil(artifacts.length / 2)).map((artifact) => (
             <img
               key={artifact.objectID}
               src={artifact.image}
@@ -211,10 +208,9 @@ export default function Home() {
                 e.target.src = 'https://eagle-sensors.com/wp-content/uploads/unavailable-image.jpg';
               }}
               style={{
-                height: `${100 + Math.random() * 100}px`,
+                height: `${80 + Math.random() * 160}px`,
                 maxWidth: '160px',
                 objectFit: 'cover',
-                borderRadius: '8px',
                 transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 6 - 3}deg)`,
                 boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
               }}
