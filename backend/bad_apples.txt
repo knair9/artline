@@ -1,0 +1,21 @@
+349469, failed to decode JSON because of error Server disconnected
+355645, received status code 404
+361395, failed to decode JSON because of error HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Read timed out. (read timeout=None)
+361477, failed to decode JSON because of error ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+366516, failed to decode JSON because of error Server disconnected
+367482, failed to decode JSON because of error HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Read timed out. (read timeout=None)
+369747, received status code 404
+369888, failed to decode JSON because of error HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Read timed out. (read timeout=None)
+370180, received status code 502
+372602, received status code 502
+372682, received status code 404
+372902, received status code 502
+372907, received status code 502
+372972, received status code 502
+372976, received status code 502
+372977, received status code 502
+392182, failed to decode JSON because of error HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Read timed out. (read timeout=None)
+397548, failed to decode JSON because of error HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Read timed out. (read timeout=None)
+397722, received status code 404
+397725, received status code 404
+397980, received status code 404
