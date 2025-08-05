@@ -153,11 +153,11 @@ export default function Home() {
           }}>
             {artifacts.slice(0, Math.ceil(artifacts.length / 2)).map((artifact) => (
               <img
-                key={artifact.objectID}
-                src={artifact.image}
-                alt={artifact.objectID}
+                key={artifact["Object ID"]}
+                src={artifact.image_url}
+                alt={artifact["Object ID"]}
                 onError={(e) => {
-                  console.log(`Failed to load image for artifact ${artifact.objectID}`);
+                  console.log(`Failed to load image for artifact ${artifact["Object ID"]}`);
                   e.target.src = 'https://eagle-sensors.com/wp-content/uploads/unavailable-image.jpg';
                 }}
                 style={{
@@ -208,11 +208,11 @@ export default function Home() {
           }}>
             {artifacts.slice(Math.ceil(artifacts.length / 2)).map((artifact) => (
               <img
-                key={artifact.objectID}
+                key={artifact["Object ID"]}
                 src={artifact.image}
-                alt={artifact.objectID}
+                alt={artifact["Object ID"]}
                 onError={(e) => {
-                  console.log(`Failed to load image for artifact ${artifact.objectID}`);
+                  console.log(`Failed to load image for artifact ${artifact["Object ID"]}`);
                   e.target.src = 'https://eagle-sensors.com/wp-content/uploads/unavailable-image.jpg';
                 }}
                 style={{
