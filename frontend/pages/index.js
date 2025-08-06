@@ -74,10 +74,31 @@ export default function Home() {
 
   return (
     <>
-      <style jsx global>{`
+    <style jsx global>{`
         html, body {
           margin: 0;
           padding: 0;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        .image-loaded {
+          opacity: 0;
+          animation: fadeIn 0.4s ease forwards;
+            opacity: 0;
+            animation-name: fadeIn;
+            animation-duration: 0.4s;
+            animation-timing-function: ease;
+            animation-fill-mode: forwards;
         }
       `}</style>
       
@@ -125,9 +146,7 @@ export default function Home() {
                     objectFit: 'cover',
                     transform: randomStylesMap[artifact["Object ID"]]?.transform || 'none',
                     boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                    opacity: 0,
-                    animationDelay: `${index * 100}ms`,
-                    animationFillMode: 'forwards'
+                    animationDelay: `${index * 100}ms`
                   }}
                 />
               ) : null
@@ -185,9 +204,7 @@ export default function Home() {
                     objectFit: 'cover',
                     transform: randomStylesMap[artifact["Object ID"]]?.transform || 'none',
                     boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                    opacity: 0,
-                    animationDelay: `${index * 100}ms`,
-                    animationFillMode: 'forwards'
+                    animationDelay: `${index * 100}ms`
                   }}
                 />
               ) : null
