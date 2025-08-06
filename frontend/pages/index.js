@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 
-
 export default function Home() {
   const minYear = 0;
   const maxYear = 2024;
@@ -12,8 +11,6 @@ export default function Home() {
   const [loadedArtifacts, setLoadedArtifacts] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const [customInterval, setCustomInterval] = useState(interval); // replace static 10 later
-  const filterRef = useRef(null);
-
 
 
   const preloadImages = async (data) => {
@@ -54,22 +51,6 @@ export default function Home() {
 
     return () => clearTimeout(delayDebounce);
   }, [range]);
-
-  useEffect(() => { //closes filter box if clicked outside of box 
-    function handleClickOutside(event) {
-      if (filterRef.current && !filterRef.current.contains(event.target)) {
-        setShowFilter(false);
-      }
-    }
-
-    if (showFilter) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showFilter]);
 
 
   const handleChange = (e) => {
@@ -174,7 +155,6 @@ export default function Home() {
           zIndex: 1000,
           boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
         }}>
-          <span style={{ display: 'inline-block', padding: '0.25rem' }}></span>
           <button
             onClick={() => setShowFilter(false)}
             style={{
@@ -191,22 +171,6 @@ export default function Home() {
             >
               ×
           </button>
-          <div
-            ref={filterRef} 
-            style={{
-              backgroundColor: 'white',
-              padding: '1.5rem 1rem 1rem 1rem',
-              border: '1px solid #ccc',
-              borderRadius: '6px',
-              position: 'absolute',
-              top: '9rem',
-              right: '2rem',
-              zIndex: 1000,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-            }}
-          >
-            {/* close button, input, apply button */}
-          </div>
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
             Time Range (in years):
             <input
