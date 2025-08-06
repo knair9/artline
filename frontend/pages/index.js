@@ -39,26 +39,13 @@ export default function Home() {
         data.forEach((artifact) => {
           const id = artifact["Object ID"];
           newStyles[id] = {
-              height: `${80 + Math.random() * 160}px`,
-              transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 6 - 3}deg)`
-            };
+            height: `${150 + Math.random() * 100}px`,  // was 80 + 160
+            transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 6 - 3}deg)`
+          };
         });
         setRandomStylesMap(newStyles);
         preloadImages(data);
       })
-
-        // .then((data) => {
-        //   setArtifacts(data);
-        //   const newStyles = {};
-        //   data.forEach((artifact) => {
-        //     const id = artifact["Object ID"];
-        //     newStyles[id] = {
-        //       height: `${80 + Math.random() * 160}px`,
-        //       transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 6 - 3}deg)`
-        //     };
-        //   });
-        //   setRandomStylesMap(newStyles);
-        // })
         .catch((err) => console.error('Error fetching:', err));
     }, 300);
 
@@ -127,9 +114,9 @@ export default function Home() {
         }
 
         .overlay-text {
-          font-size: 0.75rem;
-          line-height: 1.2;
-          max-width: 140px;
+          font-size: 0.85rem;
+          line-height: 1.3;
+          max-width: 180px;
         }
 
         .overlay-text a {
@@ -167,12 +154,13 @@ export default function Home() {
           zIndex: 1000,
           boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
         }}>
+          <span style={{ display: 'inline-block', padding: '0.25rem' }}></span>
           <button
             onClick={() => setShowFilter(false)}
             style={{
               position: 'absolute',
-              top: '0.25rem',
-              right: '0.25rem',
+              top: '0.5rem',
+              right: '0.5rem',
               background: 'transparent',
               border: 'none',
               fontSize: '1.2rem',
@@ -184,7 +172,7 @@ export default function Home() {
               ×
           </button>
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            Time Period (in years):
+            Time Range (in years):
             <input
               type="number"
               value={customInterval}
@@ -245,86 +233,48 @@ export default function Home() {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            gap: '1rem',
-            marginBottom: '3rem'
+            gap: '1rem'
           }}>
-              {loadedArtifacts.slice(0, Math.ceil(loadedArtifacts.length / 2)).map((artifact, index) => (
+            {loadedArtifacts.slice(Math.ceil(loadedArtifacts.length / 2)).map((artifact, index) => (
               artifact.loaded ? (
                 <div
-                  key={artifact["Object ID"]}
+                key={artifact["Object ID"]}
+                style={{
+                  position: 'relative',
+                  height: randomStylesMap[artifact["Object ID"]]?.height || '120px',
+                  maxWidth: '160px',
+                  transform: randomStylesMap[artifact["Object ID"]]?.transform || 'none',
+                  animationDelay: `${index * 100}ms`
+                }}
+                className="image-wrapper"
+              >
+                <img
+                  src={artifact.image_url}
+                  alt={artifact.image_url}
+                  loading="eager"
+                  decoding="sync"
+                  className="image-loaded"
                   style={{
-                    position: 'relative',
-                    height: randomStylesMap[artifact["Object ID"]]?.height || '120px',
-                    maxWidth: '160px',
-                    transform: randomStylesMap[artifact["Object ID"]]?.transform || 'none',
-                    animationDelay: `${index * 100}ms`
+                    height: '100%',
+                    width: 'auto',
+                    objectFit: 'contain',
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
                   }}
-                  className="image-wrapper"
-                >
-                  <img
-                    src={artifact.image_url}
-                    alt={artifact.image_url}
-                    loading="eager"
-                    decoding="sync"
-                    className="image-loaded"
-                    style={{
-                      height: '100%',
-                      width: 'auto',
-                      objectFit: 'contain',
-                      boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
-                    }}
-                  />
+                />
+                <div className="hover-overlay">
+                  {/* You can insert whatever text/markup you want here */}
                   <div className="overlay-text">
-                    {artifact["Title"] && artifact["Object Date"] && (
-                      <div>
-                        <strong>{artifact["Title"]}</strong>, {artifact["Object Date"]}
-                      </div>
-                    )}
-
-                    {artifact["Artist Display Name"] && (
-                      <div>{artifact["Artist Display Name"]}</div>
-                    )}
-
-                    {(artifact["Culture"] || artifact["Geography Type"] || artifact["City"] || artifact["Country"]) && (
-                      <div>
-                        {artifact["Culture"] ? artifact["Culture"] : ""}
-                        {artifact["Culture"] && artifact["Geography Type"] ? " — " : ""}
-                        {artifact["Geography Type"] ? artifact["Geography Type"] : ""}
-                        {(artifact["City"] || artifact["Country"]) && ": "}
-                        {[artifact["City"], artifact["Country"]].filter(Boolean).join(", ")}
-                      </div>
-                    )}
-
-                    <div style={{ marginTop: '0.5rem' }}>
-                      <a
-                        href={`https://www.metmuseum.org/art/collection/search/${artifact["Object ID"]}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View on Met →
-                      </a>
-                    </div>
+                    <strong>{artifact["Artist Display Name"] || "Unknown Artist"}</strong><br />
+                    {artifact["Object Date"]}<br />
+                    <em>{artifact["Medium"]}</em><br />
+                    <a href={`https://www.metmuseum.org/art/collection/search/${artifact["Object ID"]}`} target="_blank" rel="noopener noreferrer">
+                      View on Met →
+                    </a>
                   </div>
                 </div>
-                // <img
-                //   key={artifact["Object ID"]}
-                //   src={artifact.image_url}
-                //   alt={artifact.image_url}
-                //   loading="eager"
-                //   decoding="sync"
-                //   className="image-loaded"
-                //   style={{
-                //     height: randomStylesMap[artifact["Object ID"]]?.height || '120px',
-                //     maxWidth: '160px',
-                //     objectFit: 'cover',
-                //     transform: randomStylesMap[artifact["Object ID"]]?.transform || 'none',
-                //     boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                //     animationDelay: `${index * 100}ms`
-                //   }}
-                // />
+              </div>
               ) : null
             ))}
-
           </div>
 
           {/* Center Timeline */}
@@ -400,22 +350,6 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-                // <img
-                //   key={artifact["Object ID"]}
-                //   src={artifact.image_url}
-                //   alt={artifact.image_url}
-                //   loading="eager"
-                //   decoding="sync"
-                //   className="image-loaded"
-                //   style={{
-                //     height: randomStylesMap[artifact["Object ID"]]?.height || '120px',
-                //     maxWidth: '160px',
-                //     objectFit: 'cover',
-                //     transform: randomStylesMap[artifact["Object ID"]]?.transform || 'none',
-                //     boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                //     animationDelay: `${index * 100}ms`
-                //   }}
-                // />
               ) : null
             ))}
           </div>
@@ -424,26 +358,3 @@ export default function Home() {
     </>
   );
 }
-
-
-
-// //            {artifacts.slice(0, Math.ceil(artifacts.length / 2)).map((artifact) => (
-//               <img
-//                 key={artifact["Object ID"]}
-//                 src={artifact.image_url}
-//                 alt={artifact["Object ID"]}
-//                 loading="eager" //prevents top down loading 
-//                 decoding="sync"
-//                 onError={(e) => {
-//                   console.log(`Failed to load image for artifact ${artifact["Object ID"]}`);
-//                   e.target.src = 'https://eagle-sensors.com/wp-content/uploads/unavailable-image.jpg';
-//                 }}
-//                 style={{
-//                   height: randomStylesMap[artifact["Object ID"]]?.height || '150px',
-//                   maxWidth: '200px',
-//                   objectFit: 'cover',
-//                   transform: randomStylesMap[artifact["Object ID"]]?.transform || 'none',
-//                   boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
-//                 }}
-//               />
-//             ))}
