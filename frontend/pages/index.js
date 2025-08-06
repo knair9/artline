@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+
 
 export default function Home() {
   const minYear = 0;
@@ -11,6 +13,8 @@ export default function Home() {
   const [loadedArtifacts, setLoadedArtifacts] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const [customInterval, setCustomInterval] = useState(interval); // replace static 10 later
+  const filterRef = useRef(null);
+
 
 
   const preloadImages = async (data) => {
@@ -40,7 +44,7 @@ export default function Home() {
           const id = artifact["Object ID"];
           newStyles[id] = {
             height: `${150 + Math.random() * 100}px`,  // was 80 + 160
-            transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 6 - 3}deg)`
+            transform: `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`
           };
         });
         setRandomStylesMap(newStyles);
@@ -51,6 +55,23 @@ export default function Home() {
 
     return () => clearTimeout(delayDebounce);
   }, [range]);
+
+  useEffect(() => { //closes filter box if clicked outside of box 
+    function handleClickOutside(event) {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setShowFilter(false);
+      }
+    }
+
+    if (showFilter) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showFilter]);
+
 
   const handleChange = (e) => {
     const newStart = parseInt(e.target.value);
@@ -171,6 +192,22 @@ export default function Home() {
             >
               ×
           </button>
+          <div
+            ref={filterRef} 
+            style={{
+              backgroundColor: 'white',
+              padding: '1.5rem 1rem 1rem 1rem',
+              border: '1px solid #ccc',
+              borderRadius: '6px',
+              position: 'absolute',
+              top: '9rem',
+              right: '2rem',
+              zIndex: 1000,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+            }}
+          >
+            {/* close button, input, apply button */}
+          </div>
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
             Time Range (in years):
             <input
@@ -233,9 +270,9 @@ export default function Home() {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            gap: '1rem'
+            gap: '1.5rem'
           }}>
-            {loadedArtifacts.slice(Math.ceil(loadedArtifacts.length / 2)).map((artifact, index) => (
+            {loadedArtifacts.slice(0, Math.ceil(loadedArtifacts.length / 2)).map((artifact, index) => (
               artifact.loaded ? (
                 <div
                 key={artifact["Object ID"]}
@@ -282,7 +319,7 @@ export default function Home() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '1rem',
+            gap: '1.5rem',
             marginBottom: '3rem'
           }}>
             <span style={{ fontSize: '0.9rem' }}>{range[0] === 0 ? '8,000 BCE' : range[0]}</span>
