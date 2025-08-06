@@ -51,3 +51,5 @@
 352011, failed to decode JSON because of error [Errno 60] Operation timed out
 353619, received status code 404
 353664, received status code 404
+355645, received status code 404
+357284, received status code 404
