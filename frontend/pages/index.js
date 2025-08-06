@@ -7,10 +7,10 @@ export default function Home() {
 
   const [range, setRange] = useState([2010, 2020]);
   const [artifacts, setArtifacts] = useState([]);
+  const [randomStylesMap, setRandomStylesMap] = useState({});
 
   useEffect(() => {
     const [start, end] = range;
-    const [randomStylesMap, setRandomStylesMap] = useState({});
 
     // const delayDebounce = setTimeout(() => {
     //   fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}`)
