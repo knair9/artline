@@ -19,3 +19,18 @@
 397722, received status code 404
 397725, received status code 404
 397980, received status code 404
+725529, failed to decode JSON because of error {'message': 'canceling statement due to statement timeout', 'code': '57014', 'hint': None, 'details': None}
+725530, failed to decode JSON because of error {'message': 'canceling statement due to statement timeout', 'code': '57014', 'hint': None, 'details': None}
+2015, received status code 404
+3499, received status code 404
+4142, failed to decode JSON because of error {'message': 'canceling statement due to statement timeout', 'code': '57014', 'hint': None, 'details': None}
+4143, failed to decode JSON because of error {'message': 'canceling statement due to statement timeout', 'code': '57014', 'hint': None, 'details': None}
+4144, failed to decode JSON because of error {'message': 'canceling statement due to statement timeout', 'code': '57014', 'hint': None, 'details': None}
+4532, failed to decode JSON because of error [Errno 54] Connection reset by peer
+4554, failed to decode JSON because of error The read operation timed out
+4625, failed to decode JSON because of error ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+4646, failed to decode JSON because of error [Errno 54] Connection reset by peer
+4629, failed to decode JSON because of error [Errno 54] Connection reset by peer
+4656, failed to decode JSON because of error [Errno 54] Connection reset by peer
+4761, failed to decode JSON because of error [Errno 54] Connection reset by peer
+4792, received status code 404

@@ -155,7 +155,7 @@ export default function Home() {
               <img
                 key={artifact["Object ID"]}
                 src={artifact.image_url}
-                alt={artifact["Object ID"]}
+                alt={artifact.image_url}
                 onError={(e) => {
                   console.log(`Failed to load image for artifact ${artifact["Object ID"]}`);
                   e.target.src = 'https://eagle-sensors.com/wp-content/uploads/unavailable-image.jpg';
