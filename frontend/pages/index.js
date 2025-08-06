@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { useState, useEffect, useRef } from 'react';
 
 
@@ -278,8 +277,8 @@ export default function Home() {
                 key={artifact["Object ID"]}
                 style={{
                   position: 'relative',
+                  display: 'inline-block',
                   height: randomStylesMap[artifact["Object ID"]]?.height || '120px',
-                  maxWidth: '160px',
                   transform: randomStylesMap[artifact["Object ID"]]?.transform || 'none',
                   animationDelay: `${index * 100}ms`
                 }}
@@ -294,6 +293,7 @@ export default function Home() {
                   style={{
                     height: '100%',
                     width: 'auto',
+                    display: 'block',
                     objectFit: 'contain',
                     boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
                   }}
@@ -355,8 +355,8 @@ export default function Home() {
                 key={artifact["Object ID"]}
                 style={{
                   position: 'relative',
+                  display: 'inline-block',
                   height: randomStylesMap[artifact["Object ID"]]?.height || '120px',
-                  maxWidth: '160px',
                   transform: randomStylesMap[artifact["Object ID"]]?.transform || 'none',
                   animationDelay: `${index * 100}ms`
                 }}
@@ -371,6 +371,7 @@ export default function Home() {
                   style={{
                     height: '100%',
                     width: 'auto',
+                    display: 'block',
                     objectFit: 'contain',
                     boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
                   }}
