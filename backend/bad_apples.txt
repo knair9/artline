@@ -54,3 +54,6 @@
 355645, received status code 404
 357284, received status code 404
 357513, failed to decode JSON because of error HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Read timed out. (read timeout=None)
+2967, received status code 404
+3499, received status code 404
+7807, failed to decode JSON because of error Server disconnected
