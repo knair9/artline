@@ -14,6 +14,8 @@ export default function Home() {
   const [customInterval, setCustomInterval] = useState(interval); // replace static 10 later
   const [thumbPosition, setThumbPosition] = useState(0);
   const sliderRef = useRef(null);
+  const [displayedRange, setDisplayedRange] = useState([range[0], range[1]]);
+
 
   const preloadImages = async (data) => {
     const promises = data.map((artifact) => {
@@ -33,6 +35,7 @@ export default function Home() {
     const [start, end] = range;
 
     const delayDebounce = setTimeout(() => {
+      setDisplayedRange(range);
       fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}`)
         .then((res) => res.json())
         .then((data) => {
@@ -131,53 +134,106 @@ export default function Home() {
           color: #aad;
           text-decoration: underline;
         }
+    
+        .filter-panel {
+          position: absolute;
+          right: 2rem;
+          top: 100%;                 
+          background: white;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          padding: 1.5rem 1rem 1rem 1rem;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+
+          /* start hidden (for slide-up) */
+          transform: translateY(-8px);
+          opacity: 0;
+          pointer-events: none;
+
+          /* animate slide + fade */
+          transition: transform 200ms ease, opacity 200ms ease;
+          z-index: 1000;
+        }
+
+        .filter-panel.open {
+          transform: translateY(0);
+          opacity: 1;
+          pointer-events: auto;
+        }
+
+        /* red button to match the timeline */
+        .btn-red {
+          background-color: #b7492f;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          padding: 0.5rem 1rem;
+          cursor: pointer;
+        }
+        .btn-red:hover { filter: brightness(0.95); }
+
       `}</style>
-      <button
-          onClick={() => setShowFilter(true)}
-          style={{
-            backgroundColor: '#45633d',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '0.5rem 1rem',
-            cursor: 'pointer',
-            position: 'absolute',
-            right: '2rem',
-            top: '7rem',
-            zIndex: 10
-          }}
+
+      <div style={{ backgroundColor: '#f7efe7', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        {/* Thicker Green Header */}
+      <header style={{
+        backgroundColor: '#45633d',
+        color: 'white',
+        padding: '1.5rem 2rem',
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        textAlign: 'left',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        position: 'relative'     // needed so the panel anchors to the header
+      }}>
+        <span>Art Out of Time</span>
+
+        <div style={{
+          textAlign: 'center',
+          fontSize: '1rem',
+          fontWeight: '500',
+          marginTop: '1rem'
+        }}>
+          displaying artifacts from {displayedRange[0]} – {displayedRange[1]}
+        </div>
+
+        {/* Filters button now lives in the header */}
+        <button
+          className="btn-red"
+          onClick={() => setShowFilter((v) => !v)}
+          aria-expanded={showFilter}
+          aria-controls="filters-panel"
         >
           Filters
-      </button>
+        </button>
 
-      {showFilter && (
-        <div style={{
-          backgroundColor: 'white',
-          padding: '1rem',
-          border: '1px solid #ccc',
-          borderRadius: '6px',
-          position: 'absolute',
-          top: '9rem',
-          right: '2rem',
-          zIndex: 1000,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-        }}>
+        {/* Slide-down panel attached to the header */}
+        <div
+          id="filters-panel"
+          ref={filterRef}
+          className={`filter-panel ${showFilter ? 'open' : ''}`}
+        >
           <button
             onClick={() => setShowFilter(false)}
             style={{
               position: 'absolute',
-              top: '0.75 rem',
-              right: '0.75 rem',
+              top: '0.5rem',     // adjust the “×” position here
+              right: '0.5rem',
               background: 'transparent',
               border: 'none',
               fontSize: '1.2rem',
               cursor: 'pointer',
-              color: '#333'
+              color: '#333',
+              lineHeight: 1
             }}
             aria-label="Close filter panel"
-            >
-              ×
+            type="button"
+          >
+            ×
           </button>
+
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
             Time Range (in years):
             <input
@@ -186,46 +242,24 @@ export default function Home() {
               onChange={(e) => setCustomInterval(parseInt(e.target.value))}
               min={1}
               max={maxYear - minYear}
-              style={{ marginLeft: '0.5rem', width: '60px' }}
+              style={{ marginLeft: '0.5rem', width: '80px' }}
             />
           </label>
+
           <button
+            className="btn-red"
             onClick={() => {
               const newEnd = range[0] + customInterval;
-              if (newEnd <= maxYear) {
-                setRange([range[0], newEnd]);
-              } else {
-                setRange([range[0], maxYear]); // fallback
-              }
+              setRange([range[0], Math.min(newEnd, maxYear)]);
               setShowFilter(false);
             }}
-            style={{
-              backgroundColor: '#45633d',
-              color: 'white',
-              border: 'none',
-              padding: '0.5rem 1rem',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              marginTop: '0.5rem'
-            }}
+            type="button"
           >
             Apply
           </button>
         </div>
-      )}
+      </header>
 
-      <div style={{ backgroundColor: '#f7efe7', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        {/* Thicker Green Header */}
-        <header style={{
-          backgroundColor: '#45633d',
-          color: 'white',
-          padding: '1.5rem 2rem',
-          fontSize: '1.5rem',
-          fontWeight: 'bold',
-          textAlign: 'left'
-        }}>
-          Art Out of Time
-        </header>
 
         {/* Main Section Centered Around Timeline */}
         <main style={{
