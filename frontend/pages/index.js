@@ -15,6 +15,8 @@ export default function Home() {
   const [thumbPosition, setThumbPosition] = useState(0);
   const sliderRef = useRef(null);
   const [displayedRange, setDisplayedRange] = useState([range[0], range[1]]);
+  const filterRef = useRef(null);
+
 
 
   const preloadImages = async (data) => {
