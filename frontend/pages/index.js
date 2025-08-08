@@ -16,8 +16,24 @@ export default function Home() {
   const sliderRef = useRef(null);
   const [displayedRange, setDisplayedRange] = useState([range[0], range[1]]);
   const filterRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
 
+
+
+  // const preloadImages = async (data) => {
+  //   const promises = data.map((artifact) => {
+  //     return new Promise((resolve) => {
+  //       const img = new Image();
+  //       img.src = artifact.image_url;
+  //       img.onload = () => resolve({ ...artifact, loaded: true });
+  //       img.onerror = () => resolve({ ...artifact, loaded: false });
+  //     });
+  //   });
+
+  //   const resolved = await Promise.all(promises);
+  //   setLoadedArtifacts(resolved);
+  // };
 
   const preloadImages = async (data) => {
     const promises = data.map((artifact) => {
@@ -28,34 +44,76 @@ export default function Home() {
         img.onerror = () => resolve({ ...artifact, loaded: false });
       });
     });
-
+  
     const resolved = await Promise.all(promises);
-    setLoadedArtifacts(resolved);
+    return resolved; // <- return, don't setLoadedArtifacts here
   };
+
+  // useEffect(() => {
+  //   const [start, end] = range;
+
+  //   const delayDebounce = setTimeout(() => {
+  //     setDisplayedRange(range);
+  //     fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //       setArtifacts(data);
+  //       const newStyles = {};
+  //       data.forEach((artifact) => {
+  //         const id = artifact["Object ID"];
+  //         newStyles[id] = {
+  //           height: `${150 + Math.random() * 100}px`,  // was 80 + 160
+  //           transform: `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`
+  //         };
+  //       });
+  //       setRandomStylesMap(newStyles);
+  //       preloadImages(data);
+  //     })
+  //       .catch((err) => console.error('Error fetching:', err));
+  //   }, 300);
+
+  //   return () => clearTimeout(delayDebounce);
+  // }, [range]);
 
   useEffect(() => {
     const [start, end] = range;
-
+  
     const delayDebounce = setTimeout(() => {
-      setDisplayedRange(range);
+      setDisplayedRange(range);       // keep your banner in sync with fetch
+      setIsLoading(true);             // show spinner
+      setLoadedArtifacts([]);         // clear previous images so only spinner shows
+  
       fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}`)
         .then((res) => res.json())
-        .then((data) => {
-        setArtifacts(data);
-        const newStyles = {};
-        data.forEach((artifact) => {
-          const id = artifact["Object ID"];
-          newStyles[id] = {
-            height: `${150 + Math.random() * 100}px`,  // was 80 + 160
-            transform: `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`
-          };
+        .then(async (data) => {
+          setArtifacts(data);
+  
+          // Build randomized styles for this batch
+          const newStyles = {};
+          data.forEach((artifact) => {
+            const id = artifact["Object ID"];
+            newStyles[id] = {
+              height: `${150 + Math.random() * 100}px`,
+              transform: `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`
+            };
+          });
+          setRandomStylesMap(newStyles);
+  
+          // Preload all images; show nothing until this completes
+          const resolved = await preloadImages(data);
+  
+          // Now swap in the fully-loaded set
+          setLoadedArtifacts(resolved);
+        })
+        .catch((err) => {
+          console.error('Error fetching:', err);
+          // leave loadedArtifacts [] so spinner hides to empty state instead of stale images
+        })
+        .finally(() => {
+          setIsLoading(false); // hide spinner (only after preload + swap)
         });
-        setRandomStylesMap(newStyles);
-        preloadImages(data);
-      })
-        .catch((err) => console.error('Error fetching:', err));
-    }, 300);
-
+    }, 500); // debounce: 500ms
+  
     return () => clearTimeout(delayDebounce);
   }, [range]);
 
@@ -146,6 +204,7 @@ export default function Home() {
           border-radius: 6px;
           padding: 1.5rem 1rem 1rem 1rem;
           box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          color: #222;
 
           /* start hidden (for slide-up) */
           transform: translateY(-8px);
@@ -173,6 +232,30 @@ export default function Home() {
           cursor: pointer;
         }
         .btn-red:hover { filter: brightness(0.95); }
+        
+        /* === Spinner Overlay === */
+        .spinner-wrap {
+          position: fixed;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+          background: rgba(247, 239, 231, 0.6); /* faint beige veil to reinforce loading */
+        }
+
+        .spinner {
+          width: 32px;
+          height: 32px;
+          border: 3px solid rgba(0,0,0,0.15);
+          border-top-color: rgba(0,0,0,0.6);
+          border-radius: 50%;
+          animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
 
       `}</style>
 
@@ -261,8 +344,14 @@ export default function Home() {
           </button>
         </div>
       </header>
-
-
+      
+        {/* Spinner overlay */}
+        {isLoading && (
+          <div className="spinner-wrap">
+            <div className="spinner" />
+          </div>
+        )}
+            
         {/* Main Section Centered Around Timeline */}
         <main style={{
           flexGrow: 1,
@@ -359,7 +448,7 @@ export default function Home() {
               gap: '1.5rem',
               width: '100%'
             }}>
-              <span style={{ fontSize: '0.9rem' }}>{range[0]}</span>
+              <span style={{ fontSize: '0.9rem' }}>{minYear}</span>
               <input
                 ref={sliderRef}
                 type="range"
@@ -377,7 +466,7 @@ export default function Home() {
                   appearance: 'none'
                 }}
               />
-              <span style={{ fontSize: '0.9rem' }}>{range[1]}</span>
+              <span style={{ fontSize: '0.9rem' }}>{maxYear}</span>
             </div>
           </div>
           
