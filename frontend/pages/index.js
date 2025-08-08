@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
+
 export default function Home() {
   const minYear = 0;
   const maxYear = 2024;
@@ -11,7 +12,8 @@ export default function Home() {
   const [loadedArtifacts, setLoadedArtifacts] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const [customInterval, setCustomInterval] = useState(interval); // replace static 10 later
-
+  const [thumbPosition, setThumbPosition] = useState(0);
+  const sliderRef = useRef(null);
 
   const preloadImages = async (data) => {
     const promises = data.map((artifact) => {
@@ -59,6 +61,11 @@ export default function Home() {
 
     if (newEnd <= maxYear) {
       setRange([newStart, newEnd]);
+    }
+    if (sliderRef.current) {
+      const sliderWidth = sliderRef.current.offsetWidth;
+      const percent = (newStart - minYear) / (maxYear - interval - minYear);
+      setThumbPosition(percent * sliderWidth);
     }
   };
 
@@ -159,8 +166,8 @@ export default function Home() {
             onClick={() => setShowFilter(false)}
             style={{
               position: 'absolute',
-              top: '0.5rem',
-              right: '0.5rem',
+              top: '0.75 rem',
+              right: '0.75 rem',
               background: 'transparent',
               border: 'none',
               fontSize: '1.2rem',
@@ -278,7 +285,67 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Center Timeline */}
+        {/* Center Timeline */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginBottom: '3rem'
+        }}>
+          {/* Tooltip container */}
+          <div style={{
+            position: 'relative',
+            height: '30px', // space reserved for tooltip
+            width: '100%'
+          }}>
+            <div style={{
+              position: 'absolute',
+              left: `${thumbPosition}px`,
+              transform: 'translateX(-50%)',
+              bottom: '0',
+              backgroundColor: 'white',
+              padding: '2px 6px',
+              borderRadius: '4px',
+              fontSize: '0.8rem',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
+              whiteSpace: 'nowrap',
+              zIndex: 5
+            }}>
+              {range[0]} – {range[1]}
+            </div>
+          </div>
+
+            {/* Slider row with edge labels */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1.5rem',
+              width: '100%'
+            }}>
+              <span style={{ fontSize: '0.9rem' }}>{range[0]}</span>
+              <input
+                ref={sliderRef}
+                type="range"
+                min={minYear}
+                max={maxYear - interval}
+                step={1}
+                value={range[0]}
+                onChange={handleChange}
+                style={{
+                  flexGrow: 1,
+                  height: '12px',
+                  borderRadius: '6px',
+                  background: '#b7492f',
+                  accentColor: '#b7492f',
+                  appearance: 'none'
+                }}
+              />
+              <span style={{ fontSize: '0.9rem' }}>{range[1]}</span>
+            </div>
+          </div>
+          
+          {/* Center Timeline
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -304,7 +371,7 @@ export default function Home() {
               }}
             />
             <span style={{ fontSize: '0.9rem' }}>{range[1]}</span>
-          </div>
+          </div> */}
 
           {/* Bottom Images */}
           <div style={{
