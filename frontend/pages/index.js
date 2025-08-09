@@ -16,24 +16,24 @@ export default function Home() {
   const sliderRef = useRef(null);
   const [displayedRange, setDisplayedRange] = useState([range[0], range[1]]);
   const filterRef = useRef(null);
+  const [isRefreshing, setIsRefreshing] = useState(false); 
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshTick, setRefreshTick] = useState(0);
 
-
-
-
-  // const preloadImages = async (data) => {
-  //   const promises = data.map((artifact) => {
-  //     return new Promise((resolve) => {
-  //       const img = new Image();
-  //       img.src = artifact.image_url;
-  //       img.onload = () => resolve({ ...artifact, loaded: true });
-  //       img.onerror = () => resolve({ ...artifact, loaded: false });
-  //     });
-  //   });
-
-  //   const resolved = await Promise.all(promises);
-  //   setLoadedArtifacts(resolved);
-  // };
+  const prettyArtist = (val) => // Artist helper: convert pipes to commas
+    (val || '')
+      .split('|')
+      .map(s => s.trim())
+      .filter(Boolean)
+      .filter((v, i, a) => a.indexOf(v) === i) // dedupe
+      .join(', ');
+  const prettyLocation = (val) => // Location helper: convert pipes to slashes
+    (val || '')
+      .split('|')
+      .map(s => s.trim())
+      .filter(Boolean)
+      .filter((v, i, a) => a.indexOf(v) === i)
+      .join(' / ');
 
   const preloadImages = async (data) => {
     const promises = data.map((artifact) => {
@@ -49,41 +49,15 @@ export default function Home() {
     return resolved; // <- return, don't setLoadedArtifacts here
   };
 
-  // useEffect(() => {
-  //   const [start, end] = range;
-
-  //   const delayDebounce = setTimeout(() => {
-  //     setDisplayedRange(range);
-  //     fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}`)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //       setArtifacts(data);
-  //       const newStyles = {};
-  //       data.forEach((artifact) => {
-  //         const id = artifact["Object ID"];
-  //         newStyles[id] = {
-  //           height: `${150 + Math.random() * 100}px`,  // was 80 + 160
-  //           transform: `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`
-  //         };
-  //       });
-  //       setRandomStylesMap(newStyles);
-  //       preloadImages(data);
-  //     })
-  //       .catch((err) => console.error('Error fetching:', err));
-  //   }, 300);
-
-  //   return () => clearTimeout(delayDebounce);
-  // }, [range]);
-
   useEffect(() => {
-    const [start, end] = range;
-  
+    const [start, end] = range; 
+
     const delayDebounce = setTimeout(() => {
       setDisplayedRange(range);       // keep your banner in sync with fetch
       setIsLoading(true);             // show spinner
       setLoadedArtifacts([]);         // clear previous images so only spinner shows
   
-      fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}`)
+      fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}&_=${refreshTick}`)
         .then((res) => res.json())
         .then(async (data) => {
           setArtifacts(data);
@@ -111,11 +85,12 @@ export default function Home() {
         })
         .finally(() => {
           setIsLoading(false); // hide spinner (only after preload + swap)
+          setIsRefreshing(false);
         });
     }, 500); // debounce: 500ms
   
     return () => clearTimeout(delayDebounce);
-  }, [range]);
+  }, [range, refreshTick]);
 
 
   const handleChange = (e) => {
@@ -127,7 +102,7 @@ export default function Home() {
     }
     if (sliderRef.current) {
       const sliderWidth = sliderRef.current.offsetWidth;
-      const percent = (newStart - minYear) / (maxYear - interval - minYear);
+      const percent = (newStart - minYear) / (maxYear - customInterval - minYear);
       setThumbPosition(percent * sliderWidth);
     }
   };
@@ -294,6 +269,21 @@ export default function Home() {
           Filters
         </button>
 
+        <button
+          className="btn-red"
+          onClick={() => {
+            setIsRefreshing(true);   // flip UI state
+            setIsLoading(true);      // show spinner immediately
+            setRefreshTick((t) => t + 1); // refetch same range
+          }}
+          style={{ marginLeft: '0.5rem' }}
+          disabled={isRefreshing || isLoading}
+          aria-label="Shuffle images"
+        >
+          {isRefreshing || isLoading ? 'Refreshing…' : 'Shuffle'}
+        </button>
+
+
         {/* Slide-down panel attached to the header */}
         <div
           id="filters-panel"
@@ -397,8 +387,22 @@ export default function Home() {
                 <div className="hover-overlay">
                   {/* You can insert whatever text/markup you want here */}
                   <div className="overlay-text">
-                    <strong>{artifact["Artist Display Name"] || "Unknown Artist"}</strong><br />
+                    <strong>{prettyArtist(artifact["Artist Display Name"]) || "Unknown Artist"}</strong><br />
                     {artifact["Object Date"]}<br />
+                    {(() => {
+                    const geoType = (artifact["Geography Type"] || "").trim();
+                    if (!geoType) return null;
+
+                    const culture = prettyLocation(artifact["Culture"]);
+                    const city    = prettyLocation(artifact["City"]);
+                    const country = prettyLocation(artifact["Country"]);
+
+                    const left = [culture, geoType].filter(Boolean).join(' — ');
+                    const rightParts = [city, country].filter(Boolean);
+                    const right = rightParts.length ? `: ${rightParts.join(', ')}` : '';
+
+                    return <div>{left}{right}</div>;
+                    })()}
                     <em>{artifact["Medium"]}</em><br />
                     <a href={`https://www.metmuseum.org/art/collection/search/${artifact["Object ID"]}`} target="_blank" rel="noopener noreferrer">
                       View on Met →
@@ -453,7 +457,7 @@ export default function Home() {
                 ref={sliderRef}
                 type="range"
                 min={minYear}
-                max={maxYear - interval}
+                max={maxYear - customInterval}
                 step={1}
                 value={range[0]}
                 onChange={handleChange}
@@ -470,34 +474,6 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Center Timeline
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '1.5rem',
-            marginBottom: '3rem'
-          }}>
-            <span style={{ fontSize: '0.9rem' }}>{range[0] === 0 ? '8,000 BCE' : range[0]}</span>
-            <input
-              type="range"
-              min={minYear}
-              max={maxYear - interval}
-              step={1}
-              value={range[0]}
-              onChange={handleChange}
-              style={{
-                flexGrow: 1,
-                height: '12px',
-                borderRadius: '6px',
-                background: '#b7492f',
-                accentColor: '#b7492f',
-                appearance: 'none'
-              }}
-            />
-            <span style={{ fontSize: '0.9rem' }}>{range[1]}</span>
-          </div> */}
-
           {/* Bottom Images */}
           <div style={{
             display: 'flex',
