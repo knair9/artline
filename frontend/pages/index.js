@@ -333,7 +333,6 @@ export default function Home() {
             Apply
           </button>
         </div>
-      </header>
       
         {/* Spinner overlay */}
         {isLoading && (
