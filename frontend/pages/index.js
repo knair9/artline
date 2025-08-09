@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 
 
 export default function Home() {
-  const minYear = 0;
+  const minYear = -4000;
   const maxYear = 2024;
   const interval = 10;
 
@@ -19,7 +19,6 @@ export default function Home() {
   const [isRefreshing, setIsRefreshing] = useState(false); 
   const [isLoading, setIsLoading] = useState(false);
   const [refreshTick, setRefreshTick] = useState(0);
-
   const prettyArtist = (val) => // Artist helper: convert pipes to commas
     (val || '')
       .split('|')
@@ -34,6 +33,7 @@ export default function Home() {
       .filter(Boolean)
       .filter((v, i, a) => a.indexOf(v) === i)
       .join(' / ');
+  const formatYear = (y) => (y < 0 ? `${Math.abs(y)} BCE` : `${y}`);
 
   const preloadImages = async (data) => {
     const promises = data.map((artifact) => {
@@ -242,32 +242,32 @@ export default function Home() {
         padding: '1.5rem 2rem',
         fontSize: '1.5rem',
         fontWeight: 'bold',
-        textAlign: 'left',
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: '1fr auto 1fr',
         alignItems: 'center',
-        justifyContent: 'space-between',
         position: 'relative'     // needed so the panel anchors to the header
       }}>
-        <span>Art Out of Time</span>
-
+        {/* Left (title) */}
+        <div style={{ justifySelf: 'start' }}>
+          Art Out of Time
+        </div>
+        
         <div style={{
+          justifySelf: 'center',
           textAlign: 'center',
           fontSize: '1rem',
           fontWeight: '500',
-          marginTop: '1rem'
+          //marginTop: '1rem'
         }}>
-          displaying artifacts from {displayedRange[0]} – {displayedRange[1]}
+          displaying artifacts from {formatYear(displayedRange[0])} – {formatYear(displayedRange[1])}
         </div>
 
-        {/* Filters button now lives in the header */}
-        <button
-          className="btn-red"
-          onClick={() => setShowFilter((v) => !v)}
-          aria-expanded={showFilter}
-          aria-controls="filters-panel"
-        >
-          Filters
-        </button>
+        {/* Right */}
+        <div style={{ justifySelf: 'end', display: 'flex', gap: '0.5rem' }}>
+          <button className="btn-red" onClick={() => setShowFilter(v => !v)}>Filters</button>
+          <button className="btn-red" onClick={handleShuffle}>Shuffle</button>
+        </div>
+      </header>
 
         <button
           className="btn-red"
@@ -387,6 +387,7 @@ export default function Home() {
                 <div className="hover-overlay">
                   {/* You can insert whatever text/markup you want here */}
                   <div className="overlay-text">
+                    <strong>{artifact["Title"]}</strong><br />
                     <strong>{prettyArtist(artifact["Artist Display Name"]) || "Unknown Artist"}</strong><br />
                     {artifact["Object Date"]}<br />
                     {(() => {
@@ -440,7 +441,7 @@ export default function Home() {
               whiteSpace: 'nowrap',
               zIndex: 5
             }}>
-              {range[0]} – {range[1]}
+              {formatYear(range[0])} – {formatYear(range[1])}
             </div>
           </div>
 
@@ -452,7 +453,7 @@ export default function Home() {
               gap: '1.5rem',
               width: '100%'
             }}>
-              <span style={{ fontSize: '0.9rem' }}>{minYear}</span>
+              <span style={{ fontSize: '0.9rem' }}>{formatYear(minYear)}</span>
               <input
                 ref={sliderRef}
                 type="range"
@@ -470,7 +471,7 @@ export default function Home() {
                   appearance: 'none'
                 }}
               />
-              <span style={{ fontSize: '0.9rem' }}>{maxYear}</span>
+              <span style={{ fontSize: '0.9rem' }}>{formatYear(maxYear)}</span>
             </div>
           </div>
           
