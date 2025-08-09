@@ -107,6 +107,12 @@ export default function Home() {
     }
   };
 
+  const handleShuffle = () => {
+    setIsRefreshing(true);
+    setIsLoading(true);         // show spinner immediately
+    setRefreshTick(t => t + 1); // triggers the refetch for the SAME range
+  };
+
   return (
     <>
     <style jsx global>{`
@@ -268,21 +274,6 @@ export default function Home() {
           <button className="btn-red" onClick={handleShuffle}>Shuffle</button>
         </div>
       </header>
-
-        <button
-          className="btn-red"
-          onClick={() => {
-            setIsRefreshing(true);   // flip UI state
-            setIsLoading(true);      // show spinner immediately
-            setRefreshTick((t) => t + 1); // refetch same range
-          }}
-          style={{ marginLeft: '0.5rem' }}
-          disabled={isRefreshing || isLoading}
-          aria-label="Shuffle images"
-        >
-          {isRefreshing || isLoading ? 'Refreshing…' : 'Shuffle'}
-        </button>
-
 
         {/* Slide-down panel attached to the header */}
         <div
