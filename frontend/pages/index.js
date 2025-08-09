@@ -166,9 +166,15 @@ export default function Home() {
         }
 
         .overlay-text {
-          font-size: 0.85rem;
-          line-height: 1.3;
-          max-width: 180px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 6;
+          -webkit-box-orient: vertical;
+          max-height: 100%;
+          max-width: 100%;
+          padding: 0.5rem;
+          box-sizing: border-box;
         }
 
         .overlay-text a {
@@ -269,13 +275,87 @@ export default function Home() {
         </div>
 
         {/* Right */}
-        <div style={{ justifySelf: 'end', display: 'flex', gap: '0.5rem' }}>
-          <button className="btn-red" onClick={() => setShowFilter(v => !v)}>Filters</button>
-          <button className="btn-red" onClick={handleShuffle}>Shuffle</button>
+        
+        <div style={{ justifySelf: 'end', display: 'flex', gap: '0.5rem', position: 'relative' }}>
+          <button
+            className="btn-red"
+            onClick={() => setShowFilter(v => !v)}
+            aria-expanded={showFilter}
+            aria-controls="filters-panel"
+            type="button"
+          >
+            Filters
+          </button>
+
+          <button
+            className="btn-red"
+            onClick={handleShuffle}
+            disabled={isRefreshing || isLoading}
+            aria-label="Shuffle images"
+            type="button"
+          >
+            {isRefreshing || isLoading ? 'Refreshing…' : 'Shuffle'}
+          </button>
+
+          {/* Slide-down panel ANCHORED HERE */}
+          <div
+            id="filters-panel"
+            ref={filterRef}
+            className={`filter-panel ${showFilter ? 'open' : ''}`}
+            style={{
+              right: 0,
+              left: 'auto',
+              top: 'calc(100% + 8px)',
+              zIndex: 2000, // ensure on top
+            }}
+          >
+            <button
+              onClick={() => setShowFilter(false)}
+              style={{
+                position: 'absolute',
+                top: '0.5rem',
+                right: '0.5rem',
+                background: 'transparent',
+                border: 'none',
+                fontSize: '1.2rem',
+                cursor: 'pointer',
+                color: '#333',
+                lineHeight: 1
+              }}
+              aria-label="Close filter panel"
+              type="button"
+            >
+              ×
+            </button>
+
+            <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+              Time Range (in years):
+              <input
+                type="number"
+                value={customInterval}
+                onChange={(e) => setCustomInterval(parseInt(e.target.value))}
+                min={1}
+                max={maxYear - minYear}
+                style={{ marginLeft: '0.5rem', width: '80px' }}
+              />
+            </label>
+
+            <button
+              className="btn-red"
+              onClick={() => {
+                const newEnd = range[0] + customInterval;
+                setRange([range[0], Math.min(newEnd, maxYear)]);
+                setShowFilter(false);
+              }}
+              type="button"
+            >
+              Apply
+            </button>
+          </div>
         </div>
       </header>
 
-        {/* Slide-down panel attached to the header */}
+        {/* Slide-down panel attached to the header
         <div
           id="filters-panel"
           ref={filterRef}
@@ -322,8 +402,8 @@ export default function Home() {
             type="button"
           >
             Apply
-          </button>
-        </div>
+          </button> */}
+        {/* </div> */}
       
         {/* Spinner overlay */}
         {isLoading && (
@@ -378,7 +458,7 @@ export default function Home() {
                   {/* You can insert whatever text/markup you want here */}
                   <div className="overlay-text">
                     <strong>{artifact["Title"]}</strong><br />
-                    <strong>{prettyArtist(artifact["Artist Display Name"]) || "Unknown Artist"}</strong><br />
+                    {prettyArtist(artifact["Artist Display Name"]) || "Unknown Artist"}<br />
                     {artifact["Object Date"]}<br />
                     {(() => {
                     const geoType = (artifact["Geography Type"] || "").trim();
@@ -502,8 +582,23 @@ export default function Home() {
                 <div className="hover-overlay">
                   {/* You can insert whatever text/markup you want here */}
                   <div className="overlay-text">
-                    <strong>{artifact["Artist Display Name"] || "Unknown Artist"}</strong><br />
+                    <strong>{artifact["Title"]}</strong><br />
+                    {prettyArtist(artifact["Artist Display Name"]) || "Unknown Artist"}<br />
                     {artifact["Object Date"]}<br />
+                    {(() => {
+                    const geoType = (artifact["Geography Type"] || "").trim();
+                    if (!geoType) return null;
+
+                    const culture = prettyLocation(artifact["Culture"]);
+                    const city    = prettyLocation(artifact["City"]);
+                    const country = prettyLocation(artifact["Country"]);
+
+                    const left = [culture, geoType].filter(Boolean).join(' — ');
+                    const rightParts = [city, country].filter(Boolean);
+                    const right = rightParts.length ? `: ${rightParts.join(', ')}` : '';
+
+                    return <div>{left}{right}</div>;
+                    })()}
                     <em>{artifact["Medium"]}</em><br />
                     <a href={`https://www.metmuseum.org/art/collection/search/${artifact["Object ID"]}`} target="_blank" rel="noopener noreferrer">
                       View on Met →
