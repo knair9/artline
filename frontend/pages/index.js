@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 
 
 export default function Home() {
-  const minYear = -4000;
-  const maxYear = 2024;
-  const interval = 10;
+  const minYear = BCE_START;
+  const maxYear = CE_END;
+  const interval = 50;
 
   const [range, setRange] = useState([2010, 2020]);
   const [artifacts, setArtifacts] = useState([]);
@@ -33,6 +33,37 @@ export default function Home() {
       .filter(Boolean)
       .filter((v, i, a) => a.indexOf(v) === i)
       .join(' / ');
+    // --- Nonlinear timeline mapping ---
+  const BCE_START = -4000;       // min timeline year
+  const CE_END = 2024;           // max timeline year (already your max)
+  const TRACK_UNITS = 1000;      // virtual slider units
+  const SPLIT = 0.30;            // 30% of track for BCE (-4000..0), 70% for CE (0..2024)
+
+  // slider units (0..TRACK_UNITS) -> year
+  const sliderToYear = (units) => {
+    const pos = units / TRACK_UNITS;
+    if (pos <= SPLIT) {
+      const f = pos / SPLIT;                   // 0..1 across BCE
+      return Math.round(BCE_START + f * (0 - BCE_START));   // -4000..0
+    } else {
+      const f = (pos - SPLIT) / (1 - SPLIT);   // 0..1 across CE
+      return Math.round(0 + f * (CE_END - 0));               // 0..2024
+    }
+  };
+
+  // year -> slider units (0..TRACK_UNITS)
+  const yearToSlider = (y) => {
+    if (y < 0) {
+      const f = (y - BCE_START) / (0 - BCE_START);         // -4000..0 → 0..1
+      return Math.round(f * SPLIT * TRACK_UNITS);
+    } else {
+      const f = y / (CE_END - 0);                          // 0..2024 → 0..1
+      return Math.round((SPLIT + f * (1 - SPLIT)) * TRACK_UNITS);
+    }
+  };
+
+  // For tick positions in %
+  const tickLeftPct = (y) => (yearToSlider(y) / TRACK_UNITS) * 100;
   const formatYear = (y) => (y < 0 ? `${Math.abs(y)} BCE` : `${y}`);
 
   const preloadImages = async (data) => {
@@ -94,16 +125,18 @@ export default function Home() {
 
 
   const handleChange = (e) => {
-    const newStart = parseInt(e.target.value);
+    const units = parseInt(e.target.value, 10);   // 0..TRACK_UNITS
+    const newStart = sliderToYear(units);
     const newEnd = newStart + customInterval;
-
+  
     if (newEnd <= maxYear) {
       setRange([newStart, newEnd]);
     }
+  
     if (sliderRef.current) {
       const sliderWidth = sliderRef.current.offsetWidth;
-      const percent = (newStart - minYear) / (maxYear - customInterval - minYear);
-      setThumbPosition(percent * sliderWidth);
+      const percent = units / TRACK_UNITS;
+      setThumbPosition(percent * sliderWidth);    // keeps your moving tooltip in sync
     }
   };
 
@@ -159,23 +192,41 @@ export default function Home() {
           transition: opacity 0.3s ease;
           padding: 0.5rem;
           text-align: center;
+          max-height: 100%;
+          box-sizing: border-box;
+          overflow: hidden;
+          pointer-events: none;
         }
 
         .image-wrapper:hover .hover-overlay {
           opacity: 1;
+          pointer-events: auto;
         }
 
         .overlay-text {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 6;
-          -webkit-box-orient: vertical;
-          max-height: 100%;
-          max-width: 100%;
-          padding: 0.5rem;
+          font-size: 0.85rem;
+          line-height: 1.3;
+          max-width: 95%;
+          overflow: visible;
+          display: block;
+          padding: 0.2rem;
           box-sizing: border-box;
         }
+
+        .image-wrapper:hover .hover-overlay,
+        .hover-overlay:hover {
+          overflow: auto;                /* enable scroll */
+          -webkit-overflow-scrolling: touch; /* smooth on iOS */
+          overscroll-behavior: contain;  /* don’t scroll the page by accident */
+        }
+
+        .hover-overlay::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.35);
+        border-radius: 4px;
+        }
+        .hover-overlay::-webkit-scrollbar-track {
+          background: transparent;
+}
 
         .overlay-text a {
           color: #aad;
@@ -355,56 +406,6 @@ export default function Home() {
         </div>
       </header>
 
-        {/* Slide-down panel attached to the header
-        <div
-          id="filters-panel"
-          ref={filterRef}
-          className={`filter-panel ${showFilter ? 'open' : ''}`}
-        >
-          <button
-            onClick={() => setShowFilter(false)}
-            style={{
-              position: 'absolute',
-              top: '0.5rem',     // adjust the “×” position here
-              right: '0.5rem',
-              background: 'transparent',
-              border: 'none',
-              fontSize: '1.2rem',
-              cursor: 'pointer',
-              color: '#333',
-              lineHeight: 1
-            }}
-            aria-label="Close filter panel"
-            type="button"
-          >
-            ×
-          </button>
-
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            Time Range (in years):
-            <input
-              type="number"
-              value={customInterval}
-              onChange={(e) => setCustomInterval(parseInt(e.target.value))}
-              min={1}
-              max={maxYear - minYear}
-              style={{ marginLeft: '0.5rem', width: '80px' }}
-            />
-          </label>
-
-          <button
-            className="btn-red"
-            onClick={() => {
-              const newEnd = range[0] + customInterval;
-              setRange([range[0], Math.min(newEnd, maxYear)]);
-              setShowFilter(false);
-            }}
-            type="button"
-          >
-            Apply
-          </button> */}
-        {/* </div> */}
-      
         {/* Spinner overlay */}
         {isLoading && (
           <div className="spinner-wrap">
@@ -485,65 +486,93 @@ export default function Home() {
             ))}
           </div>
 
-        {/* Center Timeline */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          marginBottom: '3rem'
-        }}>
-          {/* Tooltip container */}
+          {/* Center Timeline */}
           <div style={{
-            position: 'relative',
-            height: '30px', // space reserved for tooltip
-            width: '100%'
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginBottom: '3rem'
           }}>
-            <div style={{
-              position: 'absolute',
-              left: `${thumbPosition}px`,
-              transform: 'translateX(-50%)',
-              bottom: '0',
-              backgroundColor: 'white',
-              padding: '2px 6px',
-              borderRadius: '4px',
-              fontSize: '0.8rem',
-              boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
-              whiteSpace: 'nowrap',
-              zIndex: 5
-            }}>
-              {formatYear(range[0])} – {formatYear(range[1])}
+            {/* Tooltip container (follows the thumb) */}
+            <div style={{ position: 'relative', height: '30px', width: '100%' }}>
+              <div style={{
+                position: 'absolute',
+                left: `${thumbPosition}px`,
+                transform: 'translateX(-50%)',
+                bottom: 0,
+                backgroundColor: 'white',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                fontSize: '0.8rem',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
+                whiteSpace: 'nowrap',
+                zIndex: 5
+              }}>
+                {formatYear(range[0])} – {formatYear(range[1])}
+              </div>
             </div>
-          </div>
 
-            {/* Slider row with edge labels */}
+            {/* Slider row with edge labels + ticks */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '1.5rem',
-              width: '100%'
+              width: '100%',
+              position: 'relative'
             }}>
               <span style={{ fontSize: '0.9rem' }}>{formatYear(minYear)}</span>
-              <input
-                ref={sliderRef}
-                type="range"
-                min={minYear}
-                max={maxYear - customInterval}
-                step={1}
-                value={range[0]}
-                onChange={handleChange}
-                style={{
-                  flexGrow: 1,
-                  height: '12px',
-                  borderRadius: '6px',
-                  background: '#b7492f',
-                  accentColor: '#b7492f',
-                  appearance: 'none'
-                }}
-              />
+
+              {/* Track wrapper for ticks */}
+              <div style={{ position: 'relative', flexGrow: 1 }}>
+                {/* Tick marks */}
+                <div style={{ position: 'absolute', left: 0, right: 0, top: -6, height: 18, pointerEvents: 'none' }}>
+                  {/* 2000 BCE */}
+                  <div style={{
+                    position: 'absolute',
+                    left: `${tickLeftPct(-2000)}%`,
+                    width: 2, height: '100%',
+                    background: '#333', opacity: 0.6
+                  }} />
+                  {/* Year 0 */}
+                  <div style={{
+                    position: 'absolute',
+                    left: `${tickLeftPct(0)}%`,
+                    width: 2, height: '100%',
+                    background: '#333', opacity: 0.6
+                  }} />
+                  {/* 1000 CE */}
+                  <div style={{
+                    position: 'absolute',
+                    left: `${tickLeftPct(1000)}%`,
+                    width: 2, height: '100%',
+                    background: '#333', opacity: 0.6
+                  }} />
+                </div>
+
+                {/* Non-linear slider (uses virtual units) */}
+                <input
+                  ref={sliderRef}
+                  type="range"
+                  min={0}
+                  max={TRACK_UNITS}
+                  step={1}
+                  value={yearToSlider(range[0])}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    height: '12px',
+                    borderRadius: '6px',
+                    background: '#b7492f',
+                    accentColor: '#b7492f',
+                    appearance: 'none'
+                  }}
+                />
+              </div>
+
               <span style={{ fontSize: '0.9rem' }}>{formatYear(maxYear)}</span>
             </div>
-          </div>
+          </div>          
           
           {/* Bottom Images */}
           <div style={{
