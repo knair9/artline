@@ -425,7 +425,7 @@ export default function Home() {
               Country:
               <input
                 type="text"
-                value={artistFilter}
+                value={countryFilter}
                 onChange={(e) => setCountryFilter(e.target.value)}
                 placeholder="e.g. Spain"
                 style={{ marginLeft: '0.5rem', width: '180px' }}
