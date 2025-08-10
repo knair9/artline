@@ -19,6 +19,10 @@ export default function Home() {
   const [isRefreshing, setIsRefreshing] = useState(false); 
   const [isLoading, setIsLoading] = useState(false);
   const [refreshTick, setRefreshTick] = useState(0);
+  const [mediumFilter, setMediumFilter] = useState('');
+  const [artistFilter, setArtistFilter] = useState('');
+  const [cultureFilter, setCultureFilter] = useState('');
+
   const prettyArtist = (val) => // Artist helper: convert pipes to commas
     (val || '')
       .split('|')
@@ -88,20 +92,34 @@ export default function Home() {
       setIsLoading(true);             // show spinner
       setLoadedArtifacts([]);         // clear previous images so only spinner shows
   
-      fetch(`https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?start=${start}&end=${end}&_=${refreshTick}`)
-        .then((res) => res.json())
-        .then(async (data) => {
-          setArtifacts(data);
+    
+    const params = new URLSearchParams({
+      start: String(start),
+      end: String(end),
+      _: String(refreshTick), // your cache-buster
+    });
+
+    // Only send filters if they’re set
+    if (mediumFilter && mediumFilter.trim()) params.set('medium', mediumFilter.trim());
+    if (artistFilter && artistFilter.trim()) params.set('artist', artistFilter.trim());
+    if (cultureFilter && cultureFilter.trim()) params.set('culture', cultureFilter.trim());
+
+    const url = `https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?${params.toString()}`;
+
+    fetch(url)
+      .then((res) => res.json())
+      .then(async (data) => {
+        setArtifacts(data);
   
           // Build randomized styles for this batch
-          const newStyles = {};
-          data.forEach((artifact) => {
-            const id = artifact["Object ID"];
-            newStyles[id] = {
-              height: `${150 + Math.random() * 100}px`,
-              transform: `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`
-            };
-          });
+        const newStyles = {};
+        data.forEach((artifact) => {
+          const id = artifact["Object ID"];
+          newStyles[id] = {
+            height: `${150 + Math.random() * 100}px`,
+            transform: `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`
+          };
+        });
           setRandomStylesMap(newStyles);
   
           // Preload all images; show nothing until this completes
@@ -206,10 +224,11 @@ export default function Home() {
         .overlay-text {
           font-size: 0.85rem;
           line-height: 1.3;
-          max-width: 95%;
+          max-width: 98%;
+          max-height: 98%;
           overflow: visible;
           display: block;
-          padding: 0.2rem;
+          padding: 0.1rem 0.1rem 0.1rem 0.1rem;
           box-sizing: border-box;
         }
 
@@ -379,7 +398,7 @@ export default function Home() {
               ×
             </button>
 
-            <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
               Time Range (in years):
               <input
                 type="number"
@@ -391,11 +410,45 @@ export default function Home() {
               />
             </label>
 
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
+              Medium:
+              <input
+                type="text"
+                value={mediumFilter}
+                onChange={(e) => setMediumFilter(e.target.value)}
+                placeholder="e.g. oil, tempera"
+                style={{ marginLeft: '0.5rem', width: '180px' }}
+              />
+            </label>
+
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
+              Country:
+              <input
+                type="text"
+                value={artistFilter}
+                onChange={(e) => setArtistFilter(e.target.value)}
+                placeholder="e.g. Rembrandt"
+                style={{ marginLeft: '0.5rem', width: '180px' }}
+              />
+            </label>
+
+            <label style={{ display: 'block', marginBottom: '0.75rem', fontSize: '0.85rem' }}>
+              Culture:
+              <input
+                type="text"
+                value={cultureFilter}
+                onChange={(e) => setCultureFilter(e.target.value)}
+                placeholder="e.g. Egyptian"
+                style={{ marginLeft: '0.5rem', width: '180px' }}
+              />
+            </label>
+            
             <button
               className="btn-red"
               onClick={() => {
                 const newEnd = range[0] + customInterval;
                 setRange([range[0], Math.min(newEnd, maxYear)]);
+                setRefreshTick((t) => t + 1);
                 setShowFilter(false);
               }}
               type="button"
@@ -534,6 +587,16 @@ export default function Home() {
                     width: 2, height: '100%',
                     background: '#333', opacity: 0.6
                   }} />
+                  <div style={{
+                    position: 'absolute',
+                    left: `${tickLeftPct(-2000)}%`,
+                    top: 18, /* just below tick */
+                    transform: 'translateX(-50%)',
+                    fontSize: '0.7rem',
+                    color: '#333'
+                  }}>
+                    2000 BCE
+                  </div>
                   {/* Year 0 */}
                   <div style={{
                     position: 'absolute',
@@ -541,6 +604,16 @@ export default function Home() {
                     width: 2, height: '100%',
                     background: '#333', opacity: 0.6
                   }} />
+                  <div style={{
+                    position: 'absolute',
+                    left: `${tickLeftPct(-2000)}%`,
+                    top: 18, /* just below tick */
+                    transform: 'translateX(-50%)',
+                    fontSize: '0.7rem',
+                    color: '#333'
+                  }}>
+                    0 
+                  </div>                  
                   {/* 1000 CE */}
                   <div style={{
                     position: 'absolute',
