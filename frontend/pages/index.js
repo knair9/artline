@@ -579,7 +579,7 @@ export default function Home() {
               {/* Track wrapper for ticks */}
               <div style={{ position: 'relative', flexGrow: 1 }}>
                 {/* Tick marks */}
-                <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 100%, pointerEvents: 'none' }}>
+                <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: '12px', pointerEvents: 'none' }}>
                   {/* 2000 BCE */}
                   <div style={{
                     position: 'absolute',
@@ -602,7 +602,7 @@ export default function Home() {
                   {/* Year 0 */}
                   <div style={{
                     position: 'absolute',
-                    left: `${tickLeftPct(-2000)}%`,
+                    left: `${tickLeftPct(0)}%`,
                     top: 0,
                     transform: 'translateX(-50%)',
                     width: 2, height: '100%',
@@ -610,7 +610,7 @@ export default function Home() {
                   }} />
                   <div style={{
                     position: 'absolute',
-                    left: `${tickLeftPct(-2000)}%`,
+                    left: `${tickLeftPct(0)}%`,
                     top: 22, /* just below tick */
                     transform: 'translateX(-50%)',
                     fontSize: '0.7rem',
@@ -621,7 +621,7 @@ export default function Home() {
                   {/* 1000 CE */}
                   <div style={{
                     position: 'absolute',
-                    left: `${tickLeftPct(-2000)}%`,
+                    left: `${tickLeftPct(1000)}%`,
                     top: 0,
                     transform: 'translateX(-50%)',
                     width: 2, height: '100%',
@@ -629,7 +629,7 @@ export default function Home() {
                   }} />
                   <div style={{
                     position: 'absolute',
-                    left: `${tickLeftPct(-2000)}%`,
+                    left: `${tickLeftPct(1000)}%`,
                     top: 22, /* just below tick */
                     transform: 'translateX(-50%)',
                     fontSize: '0.7rem',
