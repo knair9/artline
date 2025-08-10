@@ -19,8 +19,8 @@ export default function Home() {
   const [isRefreshing, setIsRefreshing] = useState(false); 
   const [isLoading, setIsLoading] = useState(false);
   const [refreshTick, setRefreshTick] = useState(0);
-  const [mediumFilter, setMediumFilter] = useState('');
-  const [artistFilter, setArtistFilter] = useState('');
+  const [classificationFilter, setClassificationFilter] = useState('');
+  const [countryFilter, setCountryFilter] = useState('');
   const [cultureFilter, setCultureFilter] = useState('');
 
   const prettyArtist = (val) => // Artist helper: convert pipes to commas
@@ -100,8 +100,8 @@ export default function Home() {
     });
 
     // Only send filters if they’re set
-    if (mediumFilter && mediumFilter.trim()) params.set('medium', mediumFilter.trim());
-    if (artistFilter && artistFilter.trim()) params.set('artist', artistFilter.trim());
+    if (classificationFilter && classificationFilter.trim()) params.set('classification', classificationFilter.trim());
+    if (countryFilter && countryFilter.trim()) params.set('country', countryFilter.trim());
     if (cultureFilter && cultureFilter.trim()) params.set('culture', cultureFilter.trim());
 
     const url = `https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?${params.toString()}`;
@@ -228,7 +228,7 @@ export default function Home() {
           max-height: 98%;
           overflow: visible;
           display: block;
-          padding: 0.1rem 0.1rem 0.1rem 0.1rem;
+          padding: 0.05rem 0.05rem 0.05rem 0.05rem;
           box-sizing: border-box;
         }
 
@@ -411,11 +411,11 @@ export default function Home() {
             </label>
 
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
-              Medium:
+              Classification:
               <input
                 type="text"
-                value={mediumFilter}
-                onChange={(e) => setMediumFilter(e.target.value)}
+                value={classificationFilter}
+                onChange={(e) => setClassificationFilter(e.target.value)}
                 placeholder="e.g. oil, tempera"
                 style={{ marginLeft: '0.5rem', width: '180px' }}
               />
@@ -426,8 +426,8 @@ export default function Home() {
               <input
                 type="text"
                 value={artistFilter}
-                onChange={(e) => setArtistFilter(e.target.value)}
-                placeholder="e.g. Rembrandt"
+                onChange={(e) => setCountryFilter(e.target.value)}
+                placeholder="e.g. Spain"
                 style={{ marginLeft: '0.5rem', width: '180px' }}
               />
             </label>
@@ -579,18 +579,20 @@ export default function Home() {
               {/* Track wrapper for ticks */}
               <div style={{ position: 'relative', flexGrow: 1 }}>
                 {/* Tick marks */}
-                <div style={{ position: 'absolute', left: 0, right: 0, top: -6, height: 18, pointerEvents: 'none' }}>
+                <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 100%, pointerEvents: 'none' }}>
                   {/* 2000 BCE */}
                   <div style={{
                     position: 'absolute',
                     left: `${tickLeftPct(-2000)}%`,
+                    top: 0,
+                    transform: 'translateX(-50%)',
                     width: 2, height: '100%',
                     background: '#333', opacity: 0.6
                   }} />
                   <div style={{
                     position: 'absolute',
                     left: `${tickLeftPct(-2000)}%`,
-                    top: 18, /* just below tick */
+                    top: 22, /* just below tick */
                     transform: 'translateX(-50%)',
                     fontSize: '0.7rem',
                     color: '#333'
@@ -600,14 +602,16 @@ export default function Home() {
                   {/* Year 0 */}
                   <div style={{
                     position: 'absolute',
-                    left: `${tickLeftPct(0)}%`,
+                    left: `${tickLeftPct(-2000)}%`,
+                    top: 0,
+                    transform: 'translateX(-50%)',
                     width: 2, height: '100%',
                     background: '#333', opacity: 0.6
                   }} />
                   <div style={{
                     position: 'absolute',
                     left: `${tickLeftPct(-2000)}%`,
-                    top: 18, /* just below tick */
+                    top: 22, /* just below tick */
                     transform: 'translateX(-50%)',
                     fontSize: '0.7rem',
                     color: '#333'
@@ -617,10 +621,22 @@ export default function Home() {
                   {/* 1000 CE */}
                   <div style={{
                     position: 'absolute',
-                    left: `${tickLeftPct(1000)}%`,
+                    left: `${tickLeftPct(-2000)}%`,
+                    top: 0,
+                    transform: 'translateX(-50%)',
                     width: 2, height: '100%',
                     background: '#333', opacity: 0.6
                   }} />
+                  <div style={{
+                    position: 'absolute',
+                    left: `${tickLeftPct(-2000)}%`,
+                    top: 22, /* just below tick */
+                    transform: 'translateX(-50%)',
+                    fontSize: '0.7rem',
+                    color: '#333'
+                  }}>
+                    1000 CE
+                  </div>
                 </div>
 
                 {/* Non-linear slider (uses virtual units) */}
