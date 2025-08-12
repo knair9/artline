@@ -1,48 +1,43 @@
-# from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from artifact import Artifact
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
+from met_scraper import get_ten_artifacts_range
 
-# app = FastAPI()  # This creates the FastAPI app instance
+app = FastAPI()  # creates the FastAPI app instance
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # You can later replace "*" with your Vercel URL
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://art-in-time.vercel.app",
+        "https://art-in-time-git-main-knair9s-projects.vercel.app",
+        "https://art-in-time-knair9s-projects.vercel.app",
+        "https://art-in-time-nnwxpu0tw-knair9s-projects.vercel.app"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
+@app.options("/api/artifacts")
+def preflight():
+    return {"message": "CORS preflight successful"}
 
-# # Example artifact, manually entered for now
-# @app.get("/api/artifacts")
+
+@app.get("/api/artifacts")
 def get_artifacts(
-    start: int = Query(..., description="user start year"),
-    end: int = Query(..., description="user end year")
-):
-    artifacts = get_artifacts_range(start, end)
-    artifact_list = []
-    if artifacts:
-        for artifact in artifacts:
-            if artifact.get_image():
-                artifact_data = {
-                    "objectID": artifact.get_objectID(),
-                    "objectDate": artifact.get_objectDate(),
-                    "beginDate": artifact.get_beginDate(),
-                    "endDate": artifact.get_endDate(),
-                    "isHighlight": artifact.get_isHighlight(),
-                    "isPublicDomain": artifact.get_isPublicDomain(),
-                    "image": artifact.get_image(),
-                    "image_small": artifact.get_image_small(),
-                    "other_images": artifact.get_other_images(),
-                    "department": artifact.get_department(),
-                    "objectName": artifact.get_objectName(),
-                    "title": artifact.get_title(),
-                    "culture": artifact.get_culture(),
-                    "period": artifact.get_period(),
-                    "medium": artifact.get_medium(),
-                    "artist": artifact.get_artist(),
-                    "met_url":artifact.get_met_url()
-                }
-                artifact_list.append(artifact_data)
-    return artifact_list
+        start: int = Query(..., description="user start year"),
+        end: int = Query(..., description="user end year"),
+        classification: str | None = Query(None, description="optional medium filter"),
+        country: str | None = Query(None,
+                                    description="optional country filter"),
+        culture: str | None = Query(None,
+                                    description="optional culture filter")):
+    artifacts = get_ten_artifacts_range(start,
+                                        end,
+                                        classification=classification,
+                                        country=country,
+                                        culture=culture)
+    print(f"Fetched {len(artifacts)} artifacts from {start} to {end}")
+
+    return artifacts

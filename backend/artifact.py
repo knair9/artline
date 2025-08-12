@@ -82,3 +82,6 @@ class Artifact:
 
     def get_met_url(self):
         return self.met_url
+
+    def __str__(self):
+        return f"Artifact. id: {self.objectID} by {self.artist} ({self.objectDate})"

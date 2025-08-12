@@ -7,9 +7,9 @@ class HistoricalDate:
         self.year =  "No Year"
         self.precision = "" # how percise the parsed data is (exact, circa, century)
         self.parse()
-    
+
     def parse(self): 
-        
+
         text = self.raw.lower()
 
         if "bc" in text or "bce" in text: # handle bc cases 
@@ -24,7 +24,7 @@ class HistoricalDate:
                 if match: 
                     self.year = -int(match.group(1)) # convert digits to year (negative for bc)
                     self.precision = "circa" if "circa" in text or "ca" in text or "c." in text else "exact"
-      
+
         elif "century" in text: # handles century: ex: 19th century 
             match = re.search(r"(\d+)(st|nd|rd|th)? century", text)
             if match: 
@@ -43,7 +43,7 @@ class HistoricalDate:
                 self.year = int(match.group(1))
                 self.precision = "exact"
             self.precision = "exact"
-            
+
     def get_year(self): 
         return self.year 
 
@@ -55,9 +55,7 @@ class HistoricalDate:
 
     def __str__(self):
         return f"Raw Date: {self.raw}, Year: {self.year}, Precision:{self.precision}"
-    
-    
-    
+
 
 test = HistoricalDate("1754")  
 print(test.get_year())
