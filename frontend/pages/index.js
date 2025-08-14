@@ -104,7 +104,7 @@ export default function Home() {
     if (countryFilter && countryFilter.trim()) params.set('country', countryFilter.trim());
     if (cultureFilter && cultureFilter.trim()) params.set('culture', cultureFilter.trim());
 
-    const url = `https://2cee4517-367f-42a2-a853-ea6b5692fafd-00-24mm7jzsa4gt5.kirk.replit.dev/api/artifacts?${params.toString()}`;
+    const url = `https://art-in-time-api-22380654468.us-central1.run.app/api/artifacts?${params.toString()}`;
 
     fetch(url)
       .then((res) => res.json())
