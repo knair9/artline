@@ -331,8 +331,7 @@ export default function Home() {
       }}>
       <div style={{ 
         justifySelf: 'start', 
-        fontSize: '32px',       // makes it bigger
-        fontFamily: '"Comic Sans MS", "Pacifico", cursive', // cuter font
+        fontSize: '40px',       // makes it bigger
       }}>
           Artline
       </div>
