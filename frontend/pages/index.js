@@ -329,10 +329,12 @@ export default function Home() {
         alignItems: 'center',
         position: 'relative'     // needed so the panel anchors to the header
       }}>
-        {/* Left (title) */}
-        <div style={{ justifySelf: 'start' }}>
-          Art Out of Time
-        </div>
+      <div style={{ 
+        justifySelf: 'start', 
+        fontSize: '40px',       // makes it bigger
+      }}>
+          Artline
+      </div>
         
         <div style={{
           justifySelf: 'center',
