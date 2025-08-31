@@ -329,10 +329,13 @@ export default function Home() {
         alignItems: 'center',
         position: 'relative'     // needed so the panel anchors to the header
       }}>
-        {/* Left (title) */}
-        <div style={{ justifySelf: 'start' }}>
+      <div style={{ 
+        justifySelf: 'start', 
+        fontSize: '32px',       // makes it bigger
+        fontFamily: '"Comic Sans MS", "Pacifico", cursive', // cuter font
+      }}>
           Artline
-        </div>
+      </div>
         
         <div style={{
           justifySelf: 'center',
