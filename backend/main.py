@@ -11,7 +11,6 @@ app.add_middleware(
         "https://art-in-time.vercel.app",
         "https://art-in-time-git-main-knair9s-projects.vercel.app",
         "https://art-in-time-knair9s-projects.vercel.app",
-        "https://art-in-time-nnwxpu0tw-knair9s-projects.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
