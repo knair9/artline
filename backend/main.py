@@ -8,7 +8,7 @@ app = FastAPI()  # creates the FastAPI app instance
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://art-line.vercel.app"
+        "https://art-line.vercel.app/",
         "https://artline-git-main-knair9s-projects.vercel.app",
     ],
     allow_credentials=True,
