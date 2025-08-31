@@ -331,7 +331,7 @@ export default function Home() {
       }}>
         {/* Left (title) */}
         <div style={{ justifySelf: 'start' }}>
-          Art Out of Time
+          Artline
         </div>
         
         <div style={{
