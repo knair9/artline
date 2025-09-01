@@ -6,7 +6,7 @@ export default function Home() {
   const maxYear = CE_END;
   const interval = 50;
 
-  const [range, setRange] = useState([2010, 2020]);
+  const [range, setRange] = useState([1500, 1550]);
   const [artifacts, setArtifacts] = useState([]);
   const [randomStylesMap, setRandomStylesMap] = useState({});
   const [loadedArtifacts, setLoadedArtifacts] = useState([]);
