@@ -730,6 +730,26 @@ export default function Home() {
             ))}
           </div>
         </main>
+        {/* Disclaimer footer */}
+        <div style={{
+          position: 'fixed',
+          bottom: '10px',
+          left: '10px',
+          fontSize: '0.75rem',
+          color: '#333',
+          maxWidth: '250px',
+          lineHeight: '1.3'
+        }}>
+          All artifacts displayed are public domain, open access images from{' '}
+          <a
+            href="https://www.metmuseum.org/art/collection"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#b7492f', textDecoration: 'underline' }}
+          >
+            The Met Museum Collection
+          </a>.
+        </div>
       </div>
     </>
   );
