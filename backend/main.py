@@ -16,7 +16,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.options("/api/artifacts")
 def preflight():
     return {"message": "CORS preflight successful"}
