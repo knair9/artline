@@ -6,7 +6,7 @@ from db_connection import supabase
 
 def count_artifacts_range(start, end, classification=None, country=None, culture=None):
     query = (
-        supabase.table("random_artifacts")
+        supabase.table("art_ifacts")
         .select("*", count="exact", head=True)
         .eq("has_image", True)
         .gte("Object Begin Date", start)
@@ -23,4 +23,14 @@ def count_artifacts_range(start, end, classification=None, country=None, culture
     response = query.execute()
     return response.count
 
-print(count_artifacts_range(1800, 1900, classification="Painting"))
+def count_artifacts():
+     
+     query = (
+        supabase.table("art_ifacts")
+        .select("*", count="exact", head=True)
+        .eq("has_image", True)
+        .eq("Medium", "Wood")
+    )
+     
+print(count_artifacts())
+
