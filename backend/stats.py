@@ -32,5 +32,10 @@ def count_artifacts():
         .eq("Medium", "Wood")
     )
      
-print(count_artifacts())
+     response = query.execute()
+
+     print("count")
+     print(response.count)
+     
+count_artifacts()
 
