@@ -89,49 +89,6 @@ def preload_image_urls():
 
             time.sleep(0.8)  # extra small delay as a safety buffer
 
-            # try:
-            #   met_response = requests.get(curr_api_url)
-            #   if (met_response.status_code == 403):
-            #     print(f"\ntimed out at batch {batch_num}, object id {curr_oi}\n")
-            #     time.sleep(20)
-            #     met_response = requests.get(curr_api_url)
-            #     if (met_response.status_code == 403):
-            #       return "timed out"
-
-            #   if (met_response.status_code != 200):
-            #     print(f"Error: Received status code {met_response.status_code} for id {curr_oi}")
-            #     with open("bad_apples.txt", "a") as f:
-            #       f.write(f"{curr_oi}, received status code {met_response.status_code}\n")
-            #     continue
-
-            #   try:
-            #     curr_json = met_response.json()
-            #     curr_image_url = curr_json.get("primaryImage", "none")
-            #     if curr_image_url != "none" and curr_image_url != "":
-            #       response = (supabase.table("art_ifacts").update({
-            #           "image_url": curr_image_url
-            #       }).eq("Object ID", curr_oi).execute())
-            #       response = (supabase.table("art_ifacts").update({
-            #           "has_image": True
-            #       }).eq("Object ID", curr_oi).execute())
-            #     else:
-            #       response = (supabase.table("art_ifacts").update({
-            #           "has_image": False
-            #       }).eq("Object ID", curr_oi).execute())
-            #     print(f"updated object id {curr_oi}")
-
-            #   except requests.exceptions.JSONDecodeError:
-            #     print(f"Failed to decode JSON for object ID: {curr_oi}")
-            #     with open("bad_apples.txt", "a") as f:
-            #       f.write(f"{curr_oi}, failed to decode JSON for object ID: {curr_oi}\n")
-            #     continue
-
-            # except Exception as e:
-            #   with open("bad_apples.txt", "a") as f:
-            #       f.write(f"{curr_oi}, failed to decode JSON because of error {e}\n")
-            #   print(f"Error processing row {row}: {e}")
-            #   continue
-
         print(f"Finished batch {batch_num}")
 
     return "Done"
