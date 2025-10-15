@@ -19557,3 +19557,259 @@
 359853, received status code 502
 361598, received status code 502
 361599, received status code 502
+817550, received status code 502
+817551, received status code 502
+817552, received status code 502
+818768, received status code 502
+818769, received status code 502
+818772, received status code 502
+819289, received status code 502
+819364, received status code 502
+819652, received status code 502
+821756, received status code 502
+821944, received status code 502
+821950, received status code 502
+823798, received status code 502
+823799, received status code 502
+823801, received status code 502
+824020, received status code 502
+824392, received status code 502
+824395, received status code 502
+824397, received status code 502
+824563, received status code 502
+825320, received status code 502
+827269, received status code 502
+827273, received status code 502
+828334, received status code 502
+828773, received status code 502
+828775, received status code 502
+829331, received status code 502
+839958, received status code 502
+839960, received status code 502
+856532, received status code 502
+857919, received status code 404
+857920, received status code 404
+858007, received status code 502
+1003, received status code 502
+1009, received status code 502
+1011, received status code 502
+1014, received status code 502
+1018, received status code 502
+1019, received status code 502
+1021, received status code 502
+2015, received status code 404
+2967, received status code 404
+3499, received status code 404
+4792, received status code 404
+4841, received status code 404
+5402, received status code 502
+5408, received status code 502
+5498, received status code 404
+8381, received status code 502
+8484, received status code 502
+9881, received status code 502
+10105, received status code 502
+10107, received status code 502
+10308, received status code 502
+10309, received status code 502
+10311, received status code 502
+10312, received status code 502
+10314, received status code 502
+10318, received status code 502
+10320, received status code 502
+10321, received status code 502
+10323, received status code 502
+10325, received status code 502
+10326, received status code 502
+10333, received status code 502
+10336, received status code 502
+10367, received status code 502
+10370, received status code 502
+10372, received status code 502
+10373, received status code 502
+10374, received status code 502
+10504, received status code 502
+10505, received status code 502
+421922, received status code 502
+421929, received status code 502
+421931, received status code 502
+421933, received status code 502
+421936, received status code 502
+421939, received status code 502
+421940, received status code 502
+428127, received status code 502
+422680, received status code 502
+457168, received status code 502
+422685, received status code 502
+423035, received status code 502
+423036, received status code 502
+423229, received status code 502
+423230, received status code 502
+423231, received status code 502
+423232, received status code 502
+13503, received status code 404
+13808, received status code 502
+13809, received status code 502
+13828, received status code 502
+13829, received status code 502
+13937, received status code 404
+13938, received status code 404
+13941, received status code 404
+13942, received status code 404
+13944, received status code 404
+13945, received status code 502
+13946, received status code 502
+13948, received status code 404
+13949, received status code 404
+13950, received status code 404
+13951, received status code 404
+13952, received status code 502
+13953, received status code 404
+13955, received status code 404
+13956, received status code 502
+13957, received status code 502
+13961, received status code 502
+15233, received status code 502
+15236, received status code 502
+15237, received status code 502
+15240, received status code 502
+15242, received status code 502
+15245, received status code 502
+27400, received status code 404
+27558, received status code 404
+27617, received status code 502
+27618, received status code 502
+27619, received status code 502
+27621, received status code 502
+27623, received status code 502
+27634, received status code 502
+27687, received status code 502
+27635, received status code 502
+27640, received status code 502
+42825, received status code 404
+27768, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27768 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051afd90>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27769, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27769 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af610>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27770, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27770 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051aee90>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27771, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27771 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af890>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27772, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27772 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af610>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27773, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27773 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051afd90>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27774, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27774 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af750>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27775, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27775 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af110>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27776, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27776 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dd590>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27777, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27777 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053ddf90>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27778, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27778 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053de850>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27779, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27779 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dd810>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27780, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27780 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053df250>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27781, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27781 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053ded50>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27782, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27782 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dd090>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27783, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27783 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af110>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27784, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27784 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051aefd0>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27785, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27785 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051aed50>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27786, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27786 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051afb10>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27787, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27787 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af390>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27788, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27788 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dd450>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27800, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27800 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dd950>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27801, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27801 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dc410>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27802, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27802 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053defd0>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27789, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27789 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dee90>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27790, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27790 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dec10>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27791, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27791 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053ddbd0>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27792, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27792 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dead0>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27793, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27793 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af390>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27794, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27794 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af890>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27795, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27795 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af610>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27796, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27796 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051afd90>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27797, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27797 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af750>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27798, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27798 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dde50>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27799, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27799 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dcb90>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27803, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27803 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dd590>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27805, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27805 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053ddf90>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27807, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27807 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053de850>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27813, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27813 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dd810>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27814, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27814 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053df250>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27815, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27815 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053ded50>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27816, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27816 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af750>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27817, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27817 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af110>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27818, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27818 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051aefd0>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27819, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27819 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051aed50>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27820, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27820 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051afb10>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27821, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27821 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dc190>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27822, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27822 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dd450>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27823, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27823 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dd950>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27824, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27824 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dc410>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27825, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27825 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053defd0>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27826, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27826 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dee90>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27827, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27827 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053dec10>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27828, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27828 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1053ddbd0>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27829, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27829 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051afb10>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27830, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27830 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af390>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27831, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27831 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af890>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+27832, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/27832 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x1051af610>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+28099, received status code 502
+28100, received status code 502
+28101, received status code 502
+28103, received status code 502
+28106, received status code 502
+28110, received status code 502
+28112, received status code 502
+28113, received status code 502
+28114, received status code 502
+36256, received status code 502
+36258, received status code 502
+36260, received status code 502
+36263, received status code 502
+36264, received status code 502
+38300, received status code 404
+38301, received status code 404
+38447, received status code 404
+39052, received status code 502
+38985, received status code 502
+38986, received status code 502
+38987, received status code 502
+38989, received status code 502
+39008, received status code 502
+38994, received status code 502
+38996, received status code 502
+38997, received status code 502
+38998, received status code 502
+39030, received status code 502
+39032, received status code 502
+39038, received status code 502
+39096, received status code 404
+39097, received status code 404
+39119, received status code 502
+39121, received status code 502
+39179, received status code 404
+39184, received status code 404
+39198, received status code 404
+50877, received status code 502
+50880, received status code 502
+50900, received status code 404
+50909, received status code 404
+51014, received status code 502
+53479, failed because of error: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+53529, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/53529 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x102ed6990>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+53530, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/53530 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x102ed6d50>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+53531, failed because of error: HTTPSConnectionPool(host='collectionapi.metmuseum.org', port=443): Max retries exceeded with url: /public/collection/v1/objects/53531 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x10306df90>: Failed to resolve 'collectionapi.metmuseum.org' ([Errno 8] nodename nor servname provided, or not known)"))
+53555, failed because of error: [Errno 54] Connection reset by peer
+53772, received status code 404
+53848, received status code 404
+53965, received status code 404
+55007, received status code 404
+55037, received status code 404
+55169, received status code 502
+55333, received status code 502
+55539, received status code 502
+55639, received status code 502
+55640, received status code 502
+55646, received status code 502
+55757, received status code 502
+58418, received status code 502
+58419, received status code 502
+58420, received status code 502
+59712, received status code 502
+59938, received status code 502
+60059, received status code 502
+60062, received status code 502
+60235, received status code 502
+60270, received status code 502

@@ -25,17 +25,19 @@ def count_artifacts_range(start, end, classification=None, country=None, culture
 
 def count_artifacts():
      
-     query = (
-        supabase.table("art_ifacts")
-        .select("*", count="exact", head=True)
-        .eq("has_image", True)
-        .eq("Medium", "Wood")
+    query = (
+        supabase.table("art_ifacts") \
+        .select("*", count="exact", head=True) \
+        .neq("image_url", None) 
+        .neq("image_url", "") 
+        .neq("Country", "") 
     )
      
-     response = query.execute()
+    response = query.execute()
 
-     print("count")
-     print(response.count)
+    #  print("count")
+    return(response.count)
      
-count_artifacts()
 
+if __name__ == "__main__":
+    print(count_artifacts())
