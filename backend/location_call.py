@@ -1,10 +1,6 @@
 import requests
 import time
 
-# --- Supabase connection ---
-SUPABASE_URL = "https://wnctglwmikvkdimacmvg.supabase.co/rest/v1/art_ifacts"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InduY3RnbHdtaWt2a2RpbWFjbXZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDYxNzcsImV4cCI6MjA2ODc4MjE3N30.qGQYfzqSTkZhlv-U-9GFkz_MuyR1a_AxhUxwT5mPvZA"
-
 HEADERS = {
     "apikey": SUPABASE_KEY,
     "Authorization": f"Bearer {SUPABASE_KEY}",
