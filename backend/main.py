@@ -38,3 +38,5 @@ def get_artifacts(
     print(f"Fetched {len(artifacts)} artifacts from {start} to {end}")
 
     return artifacts
+
+
