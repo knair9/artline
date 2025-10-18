@@ -77,3 +77,73 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+import pandas as pd
+from supabase import create_client, Client
+
+# --- Supabase connection ---
+SUPABASE_URL = "https://wnctglwmikvkdimacmvg.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InduY3RnbHdtaWt2a2RpbWFjbXZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDYxNzcsImV4cCI6MjA2ODc4MjE3N30.qGQYfzqSTkZhlv-U-9GFkz_MuyR1a_AxhUxwT5mPvZA"
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+#### NIKHITA CODE:
+# Ordered by specificity (most specific → least)
+LOCATION_FIELDS = [
+    "City",
+    "State",
+    "County",
+    "Country",
+    "Region",
+    "Subregion",
+    "Locale",
+    "Locus",
+    "Excavation",
+    "River"
+]
+
+def title_case(s: str):
+    """Capitalize only the first letter of each word"""
+    return s.title() if isinstance(s, str) else s
+
+def get_most_specific_location(row):
+    """Return (location_type, location_value) for the most specific non-empty field"""
+    for field in LOCATION_FIELDS:
+        value = row.get(field.lower()) or row.get(field)
+        if value:
+            return field, title_case(value)
+    return None, None
+
+def main():
+    # Fetch data from Supabase table
+    data = supabase.table("art_ifacts").select("*").execute()
+    artifacts = data.data
+    print(f"Fetched {len(artifacts)} artifacts from Supabase")
+
+    # Build new local "table"
+    new_table = []
+    for art in artifacts:
+        location_type, location_value = get_most_specific_location(art)
+        if location_value:
+            new_table.append({
+                "Artifact ID": art.get("id"),
+                "Location Type": location_type,
+                "Location": location_value
+            })
+
+    print(f"✅ Built new table with {len(new_table)} entries")
+
+    # Convert to DataFrame for easier viewing/export
+    df = pd.DataFrame(new_table)
+    print(df.head())
+
+    # Save to CSV
+    df.to_csv("artifact_locations.csv", index=False)
+    print("📁 Saved as artifact_locations.csv")
+
+    return df
+
+if __name__ == "__main__":
+    df = main()
