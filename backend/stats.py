@@ -28,8 +28,8 @@ def count_artifacts():
     query = (
         supabase.table("art_ifacts") \
         .select("*", count="exact", head=True) \
-        .neq("image_url", None) 
-        .neq("image_url", "") 
+        # .neq("image_url", None) \
+        # .neq("image_url", "") 
         .neq("Country", "") 
     )
      
