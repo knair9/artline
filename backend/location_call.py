@@ -147,3 +147,68 @@ def main():
 
 if __name__ == "__main__":
     df = main()
+
+### GRACE's ORIGINAL CODE: 
+import sys
+import requests
+
+def forward_lookup(query):
+    """Convert a place name into coordinates."""
+    url = "https://nominatim.openstreetmap.org/search"
+    params = {"q": query, "format": "json", "limit": 1}
+    headers = {"User-Agent": "artline-location-app"}
+    response = requests.get(url, params=params, headers=headers)
+
+    if response.status_code == 200:
+        results = response.json()
+        if results:
+            result = results[0]
+            print(f"\n📍 Forward lookup for '{query}':")
+            print(f"Name: {result['display_name']}")
+            print(f"Latitude: {result['lat']}, Longitude: {result['lon']}")
+        else:
+            print("No results found.")
+    else:
+        print(f"Error: {response.status_code}")
+
+
+def reverse_lookup(lat, lon):
+    """Convert coordinates into a readable address."""
+    url = "https://nominatim.openstreetmap.org/reverse"
+    params = {"lat": lat, "lon": lon, "format": "json"}
+    headers = {"User-Agent": "artline-location-app"}
+    response = requests.get(url, params=params, headers=headers)
+
+    if response.status_code == 200:
+        data = response.json()
+        print(f"\n📍 Reverse lookup for ({lat}, {lon}):")
+        print(f"Address: {data.get('display_name', 'Unknown location')}")
+    else:
+        print(f"Error: Unable to fetch data (status {response.status_code})")
+
+
+if __name__ == "__main__":
+    # Handle command-line arguments
+    args = sys.argv[1:]
+
+    if not args:
+        print("Usage:")
+        print("  python3 backend/location_call.py 'Place Name'")
+        print("  python3 backend/location_call.py <latitude> <longitude>")
+        sys.exit(1)
+
+    # Forward lookup if user provides a string (like "Pensacola")
+    if len(args) == 1:
+        query = args[0]
+        forward_lookup(query)
+
+    # Reverse lookup if user provides 2 numbers (lat, lon)
+    elif len(args) == 2:
+        try:
+            lat = float(args[0])
+            lon = float(args[1])
+            reverse_lookup(lat, lon)
+        except ValueError:
+            print("Error: Latitude and longitude must be numeric values.")
+    else:
+        print("Error: Invalid number of arguments.")
