@@ -25,7 +25,7 @@ def preflight():
 
 
 cache_store = {}
-CACHE_EXPIRY_SECONDS = 3600  # 1 hour
+CACHE_EXPIRY_SECONDS = 3600 
 
 def get_from_cache(key: str):
     item = cache_store.get(key)
@@ -72,10 +72,12 @@ def cache_proxy(key: str = Query(..., description="unique cache key")):
     return {"status": "miss", "key": key, "data": new_data}
 
 
+
 @app.get("/cached_image")
 async def cached_image(url: str):
     if not url.startswith("https://images.metmuseum.org/"):
         raise HTTPException(status_code=400, detail="Invalid image source URL")
+
 
     cached_img = get_from_cache(url)
     if cached_img:
@@ -87,6 +89,7 @@ async def cached_image(url: str):
                 "Cache-Control": "public, max-age=604800, s-maxage=604800"
             }
         )
+
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
     if response.status_code != 200:
@@ -102,6 +105,7 @@ async def cached_image(url: str):
             "Cache-Control": "public, max-age=604800, s-maxage=604800"
         }
     )
+
 
 
 
