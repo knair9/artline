@@ -49,7 +49,7 @@ def forward_lookup(country):
 
 # --- Main ---
 def main():
-    # Fetch data from Supabase
+    # Fetch data from Supabase12
     data = supabase.table("geo_filtered").select("*").execute()
     artifacts = data.data
     print(f"📦 Fetched {len(artifacts)} artifacts from Supabase")
