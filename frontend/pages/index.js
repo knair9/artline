@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import Image from "next/image";
+
 
 
 export default function Home() {
@@ -496,7 +498,21 @@ export default function Home() {
                 }}
                 className="image-wrapper"
               >
-                <img
+                <Image
+                  src={artifact.image_url}
+                  alt={artifact.image_url}
+                  width={300} // approximate target width
+                  height={300} // same ratio; can adjust dynamically later
+                  className="image-loaded"
+                  style={{
+                    height: '100%',
+                    width: 'auto',
+                    display: 'block',
+                    objectFit: 'contain',
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                  }}
+                />
+                {/* <img
                   src={artifact.image_url}
                   alt={artifact.image_url}
                   loading="eager"
@@ -509,7 +525,7 @@ export default function Home() {
                     objectFit: 'contain',
                     boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
                   }}
-                />
+                /> */}
                 <div className="hover-overlay">
                   {/* You can insert whatever text/markup you want here */}
                   <div className="overlay-text">
@@ -685,7 +701,21 @@ export default function Home() {
                 }}
                 className="image-wrapper"
               >
-                <img
+                <Image
+                  src={artifact.image_url}
+                  alt={artifact.image_url}
+                  width={300} // approximate target width
+                  height={300} // same ratio; can adjust dynamically later
+                  className="image-loaded"
+                  style={{
+                    height: '100%',
+                    width: 'auto',
+                    display: 'block',
+                    objectFit: 'contain',
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                  }}
+                />
+                {/* <img
                   src={artifact.image_url}
                   alt={artifact.image_url}
                   loading="eager"
@@ -698,7 +728,7 @@ export default function Home() {
                     objectFit: 'contain',
                     boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
                   }}
-                />
+                /> */}
                 <div className="hover-overlay">
                   {/* You can insert whatever text/markup you want here */}
                   <div className="overlay-text">
