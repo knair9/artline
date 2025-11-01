@@ -75,7 +75,7 @@ export default function Home() {
   const preloadImages = async (data) => {
     const promises = data.map((artifact) => {
       return new Promise((resolve) => {
-        const img = new Image();
+        const img = new window.Image();
         img.src = artifact.image_url;
         img.onload = () => resolve({ ...artifact, loaded: true });
         img.onerror = () => resolve({ ...artifact, loaded: false });
