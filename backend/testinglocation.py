@@ -1,119 +1,90 @@
-import requests
-import time
-import pandas as pd
-from supabase import create_client, Client
 import os
+import time
+import requests
+import pandas as pd
 from dotenv import load_dotenv
+from supabase import create_client, Client
 
 # --- Load environment variables ---
 load_dotenv()
-
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise ValueError("❌ Missing Supabase credentials. Check your .env file.")
-
-# --- Initialize Supabase client ---
+# --- Supabase client ---
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# --- Nominatim setup ---
-NOMINATIM_HEADERS = {"User-Agent": "artline-location-app"}
-NOMINATIM_URL = "https://nominatim.openstreetmap.org"
-CACHE = {}  # cache {country_name: (lat, lon)}
 
 # --- Helper functions ---
-def get_country(row):
-    """Extract the country name from a row."""
-    for key in ["country", "Country"]:
-        if key in row and row[key]:
-            return row[key].strip()
+def forward_lookup(query):
+    """Convert a place name into coordinates (lat, lon)."""
+    url = "https://nominatim.openstreetmap.org/search"
+    params = {"q": query, "format": "json", "limit": 1}
+    headers = {"User-Agent": "artline-location-app"}
+    response = requests.get(url, params=params, headers=headers)
+
+    if response.status_code == 200 and response.json():
+        result = response.json()[0]
+        return result["lat"], result["lon"]
     return None
 
-def forward_lookup(country):
-    """Fetch coordinates (lat, lon) for a given country using Nominatim."""
-    if country in CACHE:
-        return CACHE[country]
 
-    params = {"q": country, "format": "json", "limit": 1, "accept-language": "en"}
-    r = requests.get(f"{NOMINATIM_URL}/search", params=params, headers=NOMINATIM_HEADERS)
+def reverse_lookup(lat, lon):
+    """Convert coordinates into a readable address (for verification)."""
+    url = "https://nominatim.openstreetmap.org/reverse"
+    params = {"lat": lat, "lon": lon, "format": "json"}
+    headers = {"User-Agent": "artline-location-app"}
+    response = requests.get(url, params=params, headers=headers)
 
-    if r.status_code == 200 and r.json():
-        result = r.json()[0]
-        lat, lon = float(result["lat"]), float(result["lon"])
-        CACHE[country] = (lat, lon)
-        return lat, lon
+    if response.status_code == 200:
+        data = response.json()
+        return data.get("display_name", "")
+    return None
 
-    CACHE[country] = (None, None)
-    return None, None
 
-# --- Main ---
-def main():
-    # Fetch data from Supabase12
-    data = supabase.table("geo_filtered").select("*").execute()
+# --- Main update function ---
+def update_table():
+    data = supabase.table("test").select("*").execute()
     artifacts = data.data
-    print(f"📦 Fetched {len(artifacts)} artifacts from Supabase")
-
-    new_table = []
+    print(f"📦 Fetched {len(artifacts)} artifacts from Supabase\n")
 
     for art in artifacts:
-        object_number = art.get("Object Number")
-        country = get_country(art)
+        curr_oi = art.get("Object ID")
+        raw_country = art.get("Country")
 
-        # Skip if no country
-        if not country:
+        if not raw_country:
+            print(f"⚠️ Skipping Object ID {curr_oi}: no country listed.")
             continue
 
-        # Skip if latitude and longitude already exist
-        if art.get("latitude") is not None and art.get("longitude") is not None:
-            print(f"⏩ Skipping {object_number} (coordinates already exist)")
+        # Clean up the country field (handles commas, pipes, etc.)
+        cleaned_country = raw_country.split(",")[0].split("|")[0].strip()
+        print(f"🌍 Object ID {curr_oi} | Raw: '{raw_country}' → Cleaned: '{cleaned_country}'")
+
+        coords = forward_lookup(cleaned_country)
+        if not coords:
+            print(f"  ❌ No coordinates found for '{cleaned_country}'.")
             continue
 
-        # Get coordinates
-        lat, lon = forward_lookup(country)
-        if lat is None or lon is None:
-            print(f"⚠️ No coordinates found for {country}")
+        lat, lon = coords
+        verified_location = reverse_lookup(lat, lon)
+
+        if not verified_location:
+            print(f"  ⚠️ Could not verify location for {cleaned_country}.")
             continue
 
-        print(f"✅ {object_number} ({country}): ({lat}, {lon})")
+        if cleaned_country.lower() in verified_location.lower():
+            print(f"  ✅ Verified match: {cleaned_country} → ({lat}, {lon})")
+            supabase.table("test").update({
+                "Country Cleaned": cleaned_country,
+                "latitude": lat,
+                "longitude": lon
+            }).eq("Object ID", curr_oi).execute()
+        else:
+            print(f"  ❌ Reverse lookup mismatch for '{cleaned_country}' → got '{verified_location[:60]}...'")
 
-        # Update Supabase
-        try:
-            update_data = {"latitude": lat, "longitude": lon}
-            response = (
-                supabase.table("geo_filtered")
-                .update(update_data)
-                .eq("Object Number", object_number)
-                .execute()
-            )
-            if response.data:
-                print(f"🗺️ Updated {object_number} in Supabase")
-            else:
-                print(f"⚠️ No row matched for {object_number}")
-        except Exception as e:
-            print(f"❌ Failed to update {object_number}: {e}")
+        time.sleep(1.1)  # Nominatim rate limit
 
-        # Add to local table
-        new_table.append({
-            "Object Number": object_number,
-            "Country": country,
-            "Latitude": lat,
-            "Longitude": lon
-        })
+    print("\n🎯 Finished updating artifacts.")
 
-        # Respect Nominatim rate limit
-        time.sleep(1)
-
-    # Convert to DataFrame
-    df = pd.DataFrame(new_table)
-    print(df.head())
-
-    # Save to CSV backup
-    df.to_csv("artifact_country_coords.csv", index=False)
-    print("📁 Saved as artifact_country_coords.csv")
-
-    print(f"\n✅ Finished updating {len(new_table)} artifacts.")
-    return df
 
 if __name__ == "__main__":
-    df = main()
+    update_table()

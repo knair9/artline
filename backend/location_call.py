@@ -86,6 +86,15 @@ from supabase import create_client, Client
 
 # --- Supabase connection ---
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Loads .env variables into the environment
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 #### NIKHITA CODE:
@@ -202,27 +211,3 @@ def reverse_lookup(lat, lon):
 if __name__ == "__main__":
     print("start")
     update_table()
-    # Handle command-line arguments
-    # args = sys.argv[1:]
-
-    # if not args:
-    #     print("Usage:")
-    #     print("  python3 backend/location_call.py 'Place Name'")
-    #     print("  python3 backend/location_call.py <latitude> <longitude>")
-    #     sys.exit(1)
-
-    # # Forward lookup if user provides a string (like "Pensacola")
-    # if len(args) == 1:
-    #     query = args[0]
-    #     forward_lookup(query)
-
-    # # Reverse lookup if user provides 2 numbers (lat, lon)
-    # elif len(args) == 2:
-    #     try:
-    #         lat = float(args[0])
-    #         lon = float(args[1])
-    #         reverse_lookup(lat, lon)
-    #     except ValueError:
-    #         print("Error: Latitude and longitude must be numeric values.")
-    # else:
-    #     print("Error: Invalid number of arguments.")
