@@ -504,7 +504,7 @@ export default function Home() {
                   width={300} // approximate target width
                   height={300} // same ratio; can adjust dynamically later
                   className="image-loaded"
-                  unoptimized={true}
+                  unoptimized={false}
                   style={{
                     height: '100%',
                     width: 'auto',
@@ -708,7 +708,7 @@ export default function Home() {
                   width={300} // approximate target width
                   height={300} // same ratio; can adjust dynamically later
                   className="image-loaded"
-                  unoptimized={true}
+                  unoptimized={false}
                   style={{
                     height: '100%',
                     width: 'auto',
