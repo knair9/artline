@@ -415,6 +415,38 @@ export default function Home() {
             </label>
 
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
+            Classification:
+            <input
+              list="classification-options"
+              value={classificationFilter}
+              onChange={(e) => setClassificationFilter(e.target.value)}
+              placeholder="Select or type"
+              style={{ marginLeft: '0.5rem', width: '180px' }}
+            />
+            <datalist id="classification-options">
+              <option value="Prints" />/
+              <option value="Photographs" />
+              <option value="Drawings" />
+            </datalist>
+          </label>
+
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
+            Country:
+            <input
+              list="country-options"
+              value={countryFilter}
+              onChange={(e) => setCountryFilter(e.target.value)}
+              placeholder="Select or type"
+              style={{ marginLeft: '0.5rem', width: '180px' }}
+            />
+            <datalist id="country-options">
+              <option value="Egypt" />
+              <option value="United States" />
+              <option value="Iran" />
+            </datalist>
+          </label>
+
+            {/* <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
               Classification:
               <input
                 type="text"
@@ -434,7 +466,7 @@ export default function Home() {
                 placeholder="e.g. Spain"
                 style={{ marginLeft: '0.5rem', width: '180px' }}
               />
-            </label>
+            </label> */}
 
             <label style={{ display: 'block', marginBottom: '0.75rem', fontSize: '0.85rem' }}>
               Culture:
@@ -445,7 +477,7 @@ export default function Home() {
                 placeholder="e.g. Egyptian"
                 style={{ marginLeft: '0.5rem', width: '180px' }}
               />
-            </label>
+            </label> 
             
             <button
               className="btn-red"
