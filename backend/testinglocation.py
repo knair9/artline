@@ -5,29 +5,29 @@ import re
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
-# --- Load environment variables ---
+# load virtual environment for API keys
 load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-# --- Supabase client ---
+# initializes a client to interact with Supabase
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
-# --- Helper: Clean up country names ---
+# cleans up country names
 def clean_country_name(raw_country):
-    """Clean and standardize the country name."""
+#if country is already cleaned then don't do anything
     if not raw_country:
         return None
 
-    # Takes the first part befoer spaeces
+    # takes everything before commas or other delimeters, to solve the issue of multiple countries
     cleaned = raw_country.split(",")[0].split("|")[0].strip()
 
     # If its US take full name
     if cleaned.lower().startswith("united states"):
         cleaned = "United States"
     else:
-        # Otherwise, split by space and take first word
+        # Otherwise, split by space and take first word because there were some issues with multi word phrases
         cleaned = cleaned.split(" ")[0].strip()
 
  
@@ -37,88 +37,95 @@ def clean_country_name(raw_country):
 
 # --- Forward lookup (country → coordinates) ---
 def forward_lookup(query):
-    """Convert a place name into coordinates (lat, lon)."""
+    #does the forward lookup into coordinates 
     url = "https://nominatim.openstreetmap.org/search"
-    params = {"q": query, "format": "json", "limit": 1, "accept-language": "en"}  # force English
+    params = {"q": query, "format": "json", "limit": 1, "accept-language": "en"}  # force English response
     headers = {"User-Agent": "artline-location-app"}
     response = requests.get(url, params=params, headers=headers)
 
+    #takes the response and stores it
     if response.status_code == 200 and response.json():
         result = response.json()[0]
         return result["lat"], result["lon"]
     return None
 
 
-# --- Reverse lookup (coordinates → English address) ---
+# takes lat and long 
 def reverse_lookup(lat, lon):
-    """"Makes coordinates in english.""""
     url = "https://nominatim.openstreetmap.org/reverse"
     params = {
         "lat": lat,
         "lon": lon,
         "format": "json",
-        "accept-language": "en"  # ✅ force English output
+        "accept-language": "en"  # forces english
     }
     headers = {"User-Agent": "artline-location-app"}
     response = requests.get(url, params=params, headers=headers)
 
+    #displays the name of the country given after reverse searching up the country
     if response.status_code == 200:
         data = response.json()
         return data.get("display_name", "")
     return None
 
 
-# --- Step 1: Clean country names and update Supabase ---
+#cleans all the countries in the database and creates a new row with the cleaned names
 def clean_countries():
+
     data = supabase.table("test").select("*").execute()
     artifacts = data.data
-    print(f"🧹 Fetched {len(artifacts)} artifacts for cleaning\n")
 
     for art in artifacts:
         curr_oi = art.get("Object ID")
         raw_country = art.get("Country")
 
+
         if not raw_country:
-            print(f"⚠️ Skipping Object ID {curr_oi}: no country listed.")
             continue
 
+#cleans the country and puts it in a seperate row
         cleaned_country = clean_country_name(raw_country)
 
+#if country cannot be cleaned prints a statement
         if not cleaned_country:
             print(f"🚫 Skipping Object ID {curr_oi}: non-English or invalid → '{raw_country}'")
             continue
 
-        # Update Supabase
+        # for every object the cleaned country is added
         supabase.table("test").update({
             "Country Cleaned": cleaned_country
         }).eq("Object ID", curr_oi).execute()
 
         print(f"✅ Object ID {curr_oi}: '{raw_country}' → '{cleaned_country}'")
 
-    print("\n✨ Finished cleaning country names.\n")
+    
 
 
-# --- Step 2: Use cleaned names to update coordinates ---
+# uses the cleaned country names to update coordinates 
 def update_coordinates():
     data = supabase.table("test").select("*").execute()
     artifacts = data.data
     print(f"📍 Fetched {len(artifacts)} artifacts for coordinate lookup\n")
 
-    country_cache = {}  # hash table to store countries 
+#creates a hash table to store th ecoordinates of countries
+    country_cache = {} 
+
 
     for art in artifacts:
         curr_oi = art.get("Object ID")
         cleaned_country = art.get("Country Cleaned")
 
+#will not get location if there isn't a cleaned country
         if not cleaned_country:
             print(f"⚠️ Skipping Object ID {curr_oi}: no cleaned country.")
             continue
 
-        # tries to use caches coordinates
+        # Sees if there are coordinates cahced
         if cleaned_country in country_cache:
             lat, lon = country_cache[cleaned_country]
             print(f"🗂️ Using cached coordinates for '{cleaned_country}' → ({lat}, {lon})")
         else:
+        #if there are no coordinates in the cache then finds new ones 
             coords = forward_lookup(cleaned_country)
             if not coords:
                 print(f"❌ No coordinates found for '{cleaned_country}'.")
@@ -130,7 +137,7 @@ def update_coordinates():
             if not verified_location:
                 print(f"⚠️ Could not verify location for '{cleaned_country}'.")
                 continue
-
+        #if country is verified it gets added to the cache
             if cleaned_country.lower() in verified_location.lower():
                 print(f"✅ Verified: {cleaned_country} → ({lat}, {lon})")
                 country_cache[cleaned_country] = (lat, lon)  # ✅ Store in cache
@@ -140,13 +147,12 @@ def update_coordinates():
 
             time.sleep(1.1)  # Nominatim rate limit
 
-        # Update Supabase with lat/lon (from cache or lookup)
+        # update supabase with the latitude and longitude
         supabase.table("test").update({
             "latitude": lat,
             "longitude": lon
         }).eq("Object ID", curr_oi).execute()
 
-    print("\n🎯 Finished updating coordinates.")
 
 
 # --- Main execution ---
