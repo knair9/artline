@@ -4,7 +4,7 @@ from fastapi.responses import StreamingResponse
 import httpx
 import time
 from artifact import Artifact
-from met_scraper import get_ten_artifacts_range
+from met_scraper import get_ten_artifacts_range, get_ten_artifacts_MOMA, get_ten_artifacts_cleveland, get_ten_artifacts_walter
 
 app = FastAPI()
 
@@ -44,17 +44,27 @@ def set_cache(key: str, data):
 def get_artifacts(
     start: int = Query(..., description="user start year"),
     end: int = Query(..., description="user end year"),
+    museum: str = Query("met", description="museum to query (met, moma, cleveland, walter)"),
     classification: str | None = Query(None, description="optional medium filter"),
     country: str | None = Query(None, description="optional country filter"),
     culture: str | None = Query(None, description="optional culture filter")
 ):
-    artifacts = get_ten_artifacts_range(
-        start, end,
-        classification=classification,
-        country=country,
-        culture=culture
-    )
-    print(f"Fetched {len(artifacts)} artifacts from {start} to {end}")
+    # Route to appropriate museum function
+    if museum.lower() == "moma":
+        artifacts = get_ten_artifacts_MOMA(start, end)
+    elif museum.lower() == "cleveland":
+        artifacts = get_ten_artifacts_cleveland(start, end)
+    elif museum.lower() == "walter":
+        artifacts = get_ten_artifacts_walter(start, end)
+    else:  # Default to Met Museum
+        artifacts = get_ten_artifacts_range(
+            start, end,
+            classification=classification,
+            country=country,
+            culture=culture
+        )
+    
+    print(f"Fetched {len(artifacts)} artifacts from {museum} museum between {start} and {end}")
     return artifacts
 
 
