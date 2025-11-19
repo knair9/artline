@@ -62,12 +62,13 @@ def reverse_lookup(lat, lon):
 
 
 #cleans all the countries in the database and creates a new row with the cleaned names
-def clean_countries():
+def clean_countries(art):
 
     data = supabase.table("geo_filtered").select("*").execute()
     artifacts = data.data
 
-    for art in artifacts:
+    for art in artifacts:  # Skip if already cleaned
+         # gets the object ID and raw country name
         curr_oi = art.get("Object ID")
         raw_country = art.get("Country")
 
@@ -102,13 +103,15 @@ def update_coordinates():
 
 
     for art in artifacts:
+        # curr_oi = art.get("Object ID")
+        # cleaned_country = art.get("Country Cleaned")
         curr_oi = art.get("Object ID")
+        raw_country = art.get("Country")
         cleaned_country = art.get("Country Cleaned")
 
 #will not get location if there isn't a cleaned country
-        if not cleaned_country:
-            print(f" Skipping Object ID {curr_oi}: no cleaned country.")
-            continue
+        if cleaned_country == None:
+            cleaned_country = clean_country_name(raw_country)
 
         # Sees if there are coordinates cahced
         if cleaned_country in country_cache:
@@ -141,12 +144,13 @@ def update_coordinates():
         # update supabase with the latitude and longitude
         supabase.table("geo_filtered").update({
             "latitude": lat,
-            "longitude": lon
+            "longitude": lon, 
+            
         }).eq("Object ID", curr_oi).execute()
 
 
 
 # --- Main execution ---
 if __name__ == "__main__":
-    clean_countries()
+    # clean_countries()
     update_coordinates()
