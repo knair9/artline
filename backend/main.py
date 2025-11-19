@@ -44,7 +44,7 @@ def set_cache(key: str, data):
 def get_artifacts(
     start: int = Query(..., description="user start year"),
     end: int = Query(..., description="user end year"),
-    museum: str = Query("met", description="museum to query (met, moma, cleveland, walter)"),
+    museum: str | None = Query(None, description="museum to query (met, moma, cleveland, walter)"),
     classification: str | None = Query(None, description="optional medium filter"),
     country: str | None = Query(None, description="optional country filter"),
     culture: str | None = Query(None, description="optional culture filter")
