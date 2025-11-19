@@ -91,6 +91,10 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setRefreshTick(t => t + 1);
+  }, []);
+
+  useEffect(() => {
     const [start, end] = range; 
 
     const delayDebounce = setTimeout(() => {
