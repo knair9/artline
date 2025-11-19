@@ -50,13 +50,20 @@ def get_artifacts(
     culture: str | None = Query(None, description="optional culture filter")
 ):
     # Route to appropriate museum function
-    if museum.lower() == "moma":
+    museum_lower = museum.lower().strip()
+    print(f"Museum parameter received: '{museum}' (lowercased: '{museum_lower}')")
+    
+    if museum_lower == "moma":
+        print("Routing to MOMA function")
         artifacts = get_ten_artifacts_MOMA(start, end)
-    elif museum.lower() == "cleveland":
+    elif museum_lower == "cleveland":
+        print("Routing to Cleveland function")
         artifacts = get_ten_artifacts_cleveland(start, end)
-    elif museum.lower() == "walter":
+    elif museum_lower == "walter":
+        print("Routing to Walter function")
         artifacts = get_ten_artifacts_walter(start, end)
     else:  # Default to Met Museum
+        print("Routing to Met Museum function")
         artifacts = get_ten_artifacts_range(
             start, end,
             classification=classification,
