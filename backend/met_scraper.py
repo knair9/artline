@@ -82,8 +82,9 @@ def get_ten_artifacts_MOMA(start, end):
     if end_year < begin_year:
       continue
     
-    # Check if artifact falls within requested range
-    if begin_year >= start and end_year <= end:
+    # Check if artifact overlaps with requested range
+    # Overlap occurs if: artifact_begin <= query_end AND artifact_end >= query_start
+    if begin_year <= end and end_year >= start:
       filtered_artifacts.append(artifact)
 
   if not filtered_artifacts:
@@ -134,8 +135,9 @@ def get_ten_artifacts_cleveland(start, end):
     if end_year < begin_year:
       continue
     
-    # Check if artifact falls within requested range
-    if begin_year >= start and end_year <= end:
+    # Check if artifact overlaps with requested range
+    # Overlap occurs if: artifact_begin <= query_end AND artifact_end >= query_start
+    if begin_year <= end and end_year >= start:
       filtered_artifacts.append(artifact)
 
   if not filtered_artifacts:
@@ -186,8 +188,9 @@ def get_ten_artifacts_walter(start, end):
     if end_year < begin_year:
       continue
     
-    # Check if artifact falls within requested range
-    if begin_year >= start and end_year <= end:
+    # Check if artifact overlaps with requested range
+    # Overlap occurs if: artifact_begin <= query_end AND artifact_end >= query_start
+    if begin_year <= end and end_year >= start:
       filtered_artifacts.append(artifact)
 
   if not filtered_artifacts:
