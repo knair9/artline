@@ -94,7 +94,12 @@ def clean_countries(art):
 
 # uses the cleaned country names to update coordinates 
 def update_coordinates():
-    data = supabase.table("geo_filtered").select("*").execute()
+    #gets 1000 items from the database
+    data = supabase.table("geo_filtered")\
+        .select("*")\
+        .is_("Country Cleaned", None)\
+        .execute()
+    
     artifacts = data.data
     print(f" Fetched {len(artifacts)} artifacts for coordinate lookup\n")
 
@@ -103,16 +108,27 @@ def update_coordinates():
 
 
     for art in artifacts:
-        # curr_oi = art.get("Object ID")
-        # cleaned_country = art.get("Country Cleaned")
+
         curr_oi = art.get("Object ID")
         raw_country = art.get("Country")
         cleaned_country = art.get("Country Cleaned")
-
+        curr_lat = art.get("latitude")
+        curr_lon = art.get("longitude")
+       
 #will not get location if there isn't a cleaned country
         if cleaned_country == None:
             cleaned_country = clean_country_name(raw_country)
+            if cleaned_country == None:
+                print(f" Skipping Object ID {curr_oi}: non-English or invalid → '{raw_country}'")
+                supabase.table("geo_filtered").update({
+                    "Country Cleaned": raw_country
+                }).eq("Object ID", curr_oi).execute()
+                continue
 
+        if curr_lat != None and curr_lon != None:
+            print(f" Skipping Object ID {curr_oi}: already has coordinates → ({curr_lat}, {curr_lon})")
+            continue
+        
         # Sees if there are coordinates cahced
         if cleaned_country in country_cache:
             lat, lon = country_cache[cleaned_country]
@@ -120,15 +136,19 @@ def update_coordinates():
         else:
         #if there are no coordinates in the cache then finds new ones 
             coords = forward_lookup(cleaned_country)
-            if not coords:
+            if coords == None:
                 print(f" No coordinates found for '{cleaned_country}'.")
+                supabase.table("geo_filtered").update({
+                    "Country Cleaned": raw_country
+                }).eq("Object ID", curr_oi).execute()
                 continue
+                
 
             lat, lon = coords
             verified_location = reverse_lookup(lat, lon)
             print(verified_location, lat, lon)
 
-            if not verified_location:
+            if verified_location == None:
                 print(f" Could not verify location for '{cleaned_country}'.")
                 continue
         #if country is verified it gets added to the cache
@@ -137,6 +157,10 @@ def update_coordinates():
                 country_cache[cleaned_country] = (lat, lon)  # Store in cache
             else:
                 print(f"Reverse lookup mismatch: '{cleaned_country}' → '{verified_location[:60]}...'")
+                supabase.table("geo_filtered").update({
+                    "Country Cleaned": cleaned_country
+                }).eq("Object ID", curr_oi).execute()
+
                 continue
 
             time.sleep(1.1)  # Nominatim rate limit
@@ -145,6 +169,7 @@ def update_coordinates():
         supabase.table("geo_filtered").update({
             "latitude": lat,
             "longitude": lon, 
+            "Country Cleaned": cleaned_country
             
         }).eq("Object ID", curr_oi).execute()
 
