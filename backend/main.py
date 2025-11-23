@@ -74,7 +74,7 @@ def get_artifacts(
             culture=culture
         )
     
-    print(f"Updated: fetched {len(artifacts)} artifacts from {museum} museum between {start} and {end}")
+    print(f"Test update: fetched {len(artifacts)} artifacts from {museum} museum between {start} and {end}")
     return artifacts
 
 
