@@ -13,7 +13,7 @@ def get_ten_artifacts_range(start, end, classification, country, culture):
   """
   # querying the database for artifacts between the start and end year
   query = (supabase.table("random_artifacts") \
-      .select('"Object ID"', '"Title"', '"Artist Display Name"', '"Object Date"','"Medium"','"Culture"','"City"','"Geography Type"','"City"','"State"','"Country"', '"Object Begin Date"', '"Object End Date"', '"image_url"', '"has_image"', "Classification") \
+      .select('"Object ID"', '"Title"', '"Artist Display Name"', '"Object Date"','"Medium"','"Culture"','"City"','"Geography Type"','"State"','"Country"', '"Object Begin Date"', '"Object End Date"', '"image_url"', '"has_image"', "Classification") \
       .eq("has_image", True) \
       .gte('"Object Begin Date"', start) \
       .lte('"Object End Date"', end)
@@ -41,24 +41,20 @@ def get_ten_artifacts_range(start, end, classification, country, culture):
   normalized = []
   for item in selected:
     normalized.append({
-        "title": row.get("Title"),
-        "artist": row.get("Artist Display Name"),
-        "year_start": row.get("Object Begin Date"),
-        "year_end": row.get("Object End Date"),
-        "image_url": row.get("image_url"),
-        "culture": row.get("Culture"),
+        "title": item.get("Title"),
+        "artist": item.get("Artist Display Name"),
+        "year_start": item.get("Object Begin Date"),
+        "year_end": item.get("Object End Date"),
+        "image_url": item.get("image_url"),
+        "culture": item.get("Culture"),
         "museum": "met",
 
-        "country": row.get("Country"),
-        "city": row.get("City"),
-        "state": row.get("State"),
+        "country": item.get("Country"),
+        "city": item.get("City"),
+        "state": item.get("State"),
 
-        "medium": row.get("Medium"),
-        "classification": row.get("Classification"),
-        "department": None,
-        "creditline": None,
-        "dimensions": None,
-        "provenance": None
+        "medium": item.get("Medium"),
+        "classification": item.get("Classification"),
     })
 
   return normalized
@@ -85,7 +81,7 @@ def get_ten_artifacts_MOMA(start, end):
   # Query MOMA table - select only needed columns
   query = supabase.table("Museum of Modern Art").select(
     "Title", "Artist", "BeginDate", "EndDate", 
-    "Classification", "ObjectID", "URL", "ImageURL"
+    "Classification", "ObjectID", "URL", "ImageURL", "Nationality"
   )
   response = query.execute()
   
@@ -121,24 +117,21 @@ def get_ten_artifacts_MOMA(start, end):
   normalized = []
   for item in subset:
     normalized.append({
-        "title": art.get("Title"),
-        "artist": art.get("Artist"),
-        "year_start": begin_year,
-        "year_end": end_year,
-        "image_url": art.get("ImageURL"),
-        "culture": art.get("Nationality"),
+        "title": item.get("Title"),
+        "artist": item.get("Artist"),
+        "year_start": item.get("BeginDate"),
+        "year_end": item.get("EndDate"),
+        "image_url": item.get("ImageURL"),
+        "culture": item.get("Nationality"),
         "museum": "moma",
 
         "country": None,
         "city": None,
         "state": None,
 
-        "medium": art.get("Medium"),
-        "classification": art.get("Classification"),
-        "department": art.get("Department"),
-        "creditline": art.get("CreditLine"),
-        "dimensions": art.get("Dimensions"),
-        "provenance": None
+        "medium": item.get("Medium"),
+        "classification": item.get("Classification"),
+        "department": item.get("Department"),
     })
 
   return normalized
@@ -203,24 +196,21 @@ def get_ten_artifacts_cleveland(start, end):
         continue  # Cleveland often has missing images → skip
   
     normalized.append({
-        "title": art.get("title"),
-        "artist": art.get("creators"),
-        "year_start": begin_year,
-        "year_end": end_year,
-        "image_url": art.get("image_web"),
-        "culture": art.get("culture"),
+        "title": item.get("title"),
+        "artist": item.get("creators"),
+        "year_start": item.get("creation_date_earliest"),
+        "year_end": item.get("creation_date_latest"),
+        "image_url": item.get("image_web"),
+        "culture": item.get("culture"),
         "museum": "cleveland",
 
         "country": None,
         "city": None,
         "state": None,
 
-        "medium": art.get("technique"),
-        "classification": art.get("type"),
-        "department": art.get("department"),
-        "creditline": art.get("creditline"),
-        "dimensions": art.get("measurements"),
-        "provenance": art.get("provenance")
+        "medium": item.get("technique"),
+        "classification": item.get("type"),
+        "department": item.get("department"),
     })
   return normalized
 
@@ -288,24 +278,21 @@ def get_ten_artifacts_walter(start, end):
         continue  # Skip if no image
 
     normalized.append({
-        "title": art.get("Title"),
-        "artist": art.get("Creators"),
-        "year_start": begin_year,
-        "year_end": end_year,
-        "image_url": art.get("Images"),
-        "culture": art.get("Culture"),
+        "title": item.get("Title"),
+        "artist": item.get("Creators"),
+        "year_start": item.get("DateBeginYear"),
+        "year_end": item.get("DateEndYear"),
+        "image_url": item.get("Images"),
+        "culture": item.get("Culture"),
         "museum": "walters",
 
         "country": None,
         "city": None,
         "state": None,
 
-        "medium": art.get("Medium"),
-        "classification": art.get("Classification"),
+        "medium": item.get("Medium"),
+        "classification": item.get("Classification"),
         "department": None,
-        "creditline": art.get("CreditLine"),
-        "dimensions": art.get("Dimensions"),
-        "provenance": art.get("Provenance")
     })
 
   return normalized
