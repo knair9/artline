@@ -610,9 +610,9 @@ export default function Home() {
                   />
                   <div className="hover-overlay">
                     <div className="overlay-text">
-                      <strong>{artifact["Title"]}</strong><br />
-                      {prettyArtist(artifact["Artist Display Name"]) || "Unknown Artist"}<br />
-                      {artifact["Object Date"]}<br />
+                      <strong>{artifact["title"]}</strong><br />
+                      {prettyArtist(artifact["artist"]) || "Unknown Artist"}<br />
+                      {artifact["year start"]}<br />
                       {(() => {
                         const geoType = (artifact["Geography Type"] || "").trim();
                         if (!geoType) return null;
