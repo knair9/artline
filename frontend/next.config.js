@@ -8,6 +8,20 @@ const nextConfig = {
           port: '',
           pathname: '/CRDImages/**',
         },
+        // Cleveland Museum
+        {
+          protocol: 'https',
+          hostname: 'openaccess-cdn.clevelandart.org',
+          port: '',
+          pathname: '/**',
+        },
+        // MoMA
+        {
+          protocol: 'https',
+          hostname: 'www.moma.org',
+          port: '',
+          pathname: '/media/**',
+        },
       ],
     },
   };
