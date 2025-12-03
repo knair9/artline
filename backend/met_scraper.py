@@ -38,7 +38,19 @@ def get_ten_artifacts_range(start, end, classification, country, culture):
   random.shuffle(rows)
   selected = rows[:10]
 
-  return selected
+  normalized = []
+  for item in selected:
+      normalized.append({
+          "title": item.get("Title"),
+          "artist": item.get("Artist Display Name"),
+          "year_start": item.get("Object Begin Date"),
+          "year_end": item.get("Object End Date"),
+          "image_url": item.get("image_url"),
+          "culture": item.get("Culture"),
+          "museum": "met"
+      })
+
+  return normalized
 
 
 def get_ten_artifacts_MOMA(start, end):
@@ -93,7 +105,21 @@ def get_ten_artifacts_MOMA(start, end):
 
   # Shuffle and return up to 10
   random.shuffle(filtered_artifacts)
-  return filtered_artifacts[:10]
+  subset = filtered_artifacts[:10]
+
+  normalized = []
+  for item in subset:
+      normalized.append({
+          "title": item.get("Title"),
+          "artist": item.get("Artist"),
+          "year_start": int(item.get("BeginDate", "").strip("()")) if item.get("BeginDate") else None,
+          "year_end": int(item.get("EndDate", "").strip("()")) if item.get("EndDate") else None,
+          "image_url": item.get("ImageURL"),     # Already correct field
+          "culture": None,                       # MoMA DB doesn't have culture
+          "museum": "moma"
+      })
+
+  return normalized
 
 
 def get_ten_artifacts_cleveland(start, end):
@@ -146,7 +172,25 @@ def get_ten_artifacts_cleveland(start, end):
 
   # Shuffle and return up to 10
   random.shuffle(filtered_artifacts)
-  return filtered_artifacts[:10]
+  subset = filtered_artifacts[:10]
+
+  normalized = []
+  for item in subset:
+      img = item.get("image_web")
+      if not img: 
+          continue  # Cleveland often has missing images → skip
+
+      normalized.append({
+          "title": item.get("title"),
+          "artist": item.get("creators"),
+          "year_start": item.get("creation_date_earliest"),
+          "year_end": item.get("creation_date_latest"),
+          "image_url": img,                      # normalize name
+          "culture": item.get("culture"),
+          "museum": "cleveland"
+      })
+
+  return normalized
 
 
 def get_ten_artifacts_walter(start, end):
@@ -199,4 +243,26 @@ def get_ten_artifacts_walter(start, end):
 
   # Shuffle and return up to 10
   random.shuffle(filtered_artifacts)
-  return filtered_artifacts[:10]
+  subset = filtered_artifacts[:10]
+
+  normalized = []
+  for item in subset:
+      images = item.get("Images")
+      img_url = None
+      if isinstance(images, list) and len(images) > 0:
+          img_url = images[0]  # Walters returns list of objects/strings
+
+      if not img_url:
+          continue  # Skip if no image
+
+      normalized.append({
+          "title": item.get("Title"),
+          "artist": item.get("Creators"),
+          "year_start": item.get("DateBeginYear"),
+          "year_end": item.get("DateEndYear"),
+          "image_url": img_url,
+          "culture": item.get("Culture"),
+          "museum": "walter"
+      })
+
+  return normalized
