@@ -40,15 +40,26 @@ def get_ten_artifacts_range(start, end, classification, country, culture):
 
   normalized = []
   for item in selected:
-      normalized.append({
-          "title": item.get("Title"),
-          "artist": item.get("Artist Display Name"),
-          "year_start": item.get("Object Begin Date"),
-          "year_end": item.get("Object End Date"),
-          "image_url": item.get("image_url"),
-          "culture": item.get("Culture"),
-          "museum": "met"
-      })
+    normalized.append({
+        "title": row.get("Title"),
+        "artist": row.get("Artist Display Name"),
+        "year_start": row.get("Object Begin Date"),
+        "year_end": row.get("Object End Date"),
+        "image_url": row.get("image_url"),
+        "culture": row.get("Culture"),
+        "museum": "met",
+
+        "country": row.get("Country"),
+        "city": row.get("City"),
+        "state": row.get("State"),
+
+        "medium": row.get("Medium"),
+        "classification": row.get("Classification"),
+        "department": None,
+        "creditline": None,
+        "dimensions": None,
+        "provenance": None
+    })
 
   return normalized
 
@@ -109,15 +120,26 @@ def get_ten_artifacts_MOMA(start, end):
 
   normalized = []
   for item in subset:
-      normalized.append({
-          "title": item.get("Title"),
-          "artist": item.get("Artist"),
-          "year_start": int(item.get("BeginDate", "").strip("()")) if item.get("BeginDate") else None,
-          "year_end": int(item.get("EndDate", "").strip("()")) if item.get("EndDate") else None,
-          "image_url": item.get("ImageURL"),     # Already correct field
-          "culture": None,                       # MoMA DB doesn't have culture
-          "museum": "moma"
-      })
+    normalized.append({
+        "title": art.get("Title"),
+        "artist": art.get("Artist"),
+        "year_start": begin_year,
+        "year_end": end_year,
+        "image_url": art.get("ImageURL"),
+        "culture": art.get("Nationality"),
+        "museum": "moma",
+
+        "country": None,
+        "city": None,
+        "state": None,
+
+        "medium": art.get("Medium"),
+        "classification": art.get("Classification"),
+        "department": art.get("Department"),
+        "creditline": art.get("CreditLine"),
+        "dimensions": art.get("Dimensions"),
+        "provenance": None
+    })
 
   return normalized
 
@@ -176,20 +198,30 @@ def get_ten_artifacts_cleveland(start, end):
 
   normalized = []
   for item in subset:
-      img = item.get("image_web")
-      if not img: 
-          continue  # Cleveland often has missing images → skip
+    img = item.get("image_web")
+    if not img: 
+        continue  # Cleveland often has missing images → skip
+  
+    normalized.append({
+        "title": art.get("title"),
+        "artist": art.get("creators"),
+        "year_start": begin_year,
+        "year_end": end_year,
+        "image_url": art.get("image_web"),
+        "culture": art.get("culture"),
+        "museum": "cleveland",
 
-      normalized.append({
-          "title": item.get("title"),
-          "artist": item.get("creators"),
-          "year_start": item.get("creation_date_earliest"),
-          "year_end": item.get("creation_date_latest"),
-          "image_url": img,                      # normalize name
-          "culture": item.get("culture"),
-          "museum": "cleveland"
-      })
+        "country": None,
+        "city": None,
+        "state": None,
 
+        "medium": art.get("technique"),
+        "classification": art.get("type"),
+        "department": art.get("department"),
+        "creditline": art.get("creditline"),
+        "dimensions": art.get("measurements"),
+        "provenance": art.get("provenance")
+    })
   return normalized
 
 
@@ -247,22 +279,33 @@ def get_ten_artifacts_walter(start, end):
 
   normalized = []
   for item in subset:
-      images = item.get("Images")
-      img_url = None
-      if isinstance(images, list) and len(images) > 0:
-          img_url = images[0]  # Walters returns list of objects/strings
+    images = item.get("Images")
+    img_url = None
+    if isinstance(images, list) and len(images) > 0:
+        img_url = images[0]  # Walters returns list of objects/strings
 
-      if not img_url:
-          continue  # Skip if no image
+    if not img_url:
+        continue  # Skip if no image
 
-      normalized.append({
-          "title": item.get("Title"),
-          "artist": item.get("Creators"),
-          "year_start": item.get("DateBeginYear"),
-          "year_end": item.get("DateEndYear"),
-          "image_url": img_url,
-          "culture": item.get("Culture"),
-          "museum": "walter"
-      })
+    normalized.append({
+        "title": art.get("Title"),
+        "artist": art.get("Creators"),
+        "year_start": begin_year,
+        "year_end": end_year,
+        "image_url": art.get("Images"),
+        "culture": art.get("Culture"),
+        "museum": "walters",
+
+        "country": None,
+        "city": None,
+        "state": None,
+
+        "medium": art.get("Medium"),
+        "classification": art.get("Classification"),
+        "department": None,
+        "creditline": art.get("CreditLine"),
+        "dimensions": art.get("Dimensions"),
+        "provenance": art.get("Provenance")
+    })
 
   return normalized
