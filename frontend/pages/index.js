@@ -121,23 +121,34 @@ export default function Home() {
       fetch(url)
         .then((res) => res.json())
         .then(async (data) => {
-          setArtifacts(data);
-    
+          // Normalize artifacts
+          const normalized = data.map(a => ({
+            id: a["Object ID"] || a["id"] || a["ID"] || Math.random().toString(36).substr(2,9),
+            title: a["title"] || a["Title"] || "Untitled",
+            artist: prettyArtist(a["artist"] || a["Artist Display Name"] || "Unknown Artist"),
+            year: a["year start"] || a["Object Date"] || "Unknown Date",
+            medium: a["Medium"] || "Unknown Medium",
+            location: prettyLocation(a["Culture"]) || prettyLocation(a["City"]) || prettyLocation(a["Country"]) || "",
+            image: a["image_url"] || a["Images"]?.[0] || "",
+            metLink: a["Images"]?.[0] || a["image_url"] || "#"
+          }));
+        
+          setArtifacts(normalized);
+        
           // Build randomized styles for this batch
           const newStyles = {};
-          data.forEach((artifact) => {
-            const id = artifact["Object ID"];
-            newStyles[id] = {
+          normalized.forEach((artifact) => {
+            newStyles[artifact.id] = {
               height: `${150 + Math.random() * 100}px`,
               transform: `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`
             };
           });
           setRandomStylesMap(newStyles);
-    
-          // Preload all images; show nothing until this completes
-          const resolved = await preloadImages(data);
-    
-          // Now swap in the fully-loaded set
+        
+          // Preload all images
+          const resolved = await preloadImages(normalized);
+        
+          // Set loaded artifacts
           setLoadedArtifacts(resolved);
         })
         .catch((err) => {
@@ -608,35 +619,18 @@ export default function Home() {
                       boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
                     }}
                   />
-                  <div className="hover-overlay">
-                    <div className="overlay-text">
-                      <strong>{artifact["title"]}</strong><br />
-                      {prettyArtist(artifact["artist"]) || "Unknown Artist"}<br />
-                      {artifact["year start"]}<br />
-                      {(() => {
-                        const geoType = (artifact["Geography Type"] || "").trim();
-                        if (!geoType) return null;
-
-                        const culture = prettyLocation(artifact["Culture"]);
-                        const city    = prettyLocation(artifact["City"]);
-                        const country = prettyLocation(artifact["Country"]);
-
-                        const left = [culture, geoType].filter(Boolean).join(' — ');
-                        const rightParts = [city, country].filter(Boolean);
-                        const right = rightParts.length ? `: ${rightParts.join(', ')}` : '';
-
-                        return <div>{left}{right}</div>;
-                      })()}
-                      <em>{artifact["Medium"]}</em><br />
-                      <a
-                        href={`https://www.metmuseum.org/art/collection/search/${artifact["Object ID"]}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View on Met →
-                      </a>
-                    </div>
-                  </div>
+            <div className="hover-overlay">
+              <div className="overlay-text">
+                <strong>{artifact.title}</strong><br />
+                {artifact.artist}<br />
+                {artifact.year}<br />
+                {artifact.medium}<br />
+                {artifact.location && <div>{artifact.location}</div>}
+                <a href={artifact.metLink} target="_blank" rel="noopener noreferrer">
+                  View on Met →
+                </a>
+              </div>
+            </div>
                 </div>
               ) : null
             ))}
@@ -801,7 +795,7 @@ export default function Home() {
                       boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
                     }}
                   />
-                  <div className="hover-overlay">
+                  {/* <div className="hover-overlay">
                     <div className="overlay-text">
                       <strong>{artifact["Title"]}</strong><br />
                       {prettyArtist(artifact["Artist Display Name"]) || "Unknown Artist"}<br />
@@ -829,7 +823,19 @@ export default function Home() {
                         View on Met →
                       </a>
                     </div>
+                  </div> */}
+                <div className="hover-overlay">
+                  <div className="overlay-text">
+                    <strong>{artifact.title}</strong><br />
+                    {artifact.artist}<br />
+                    {artifact.year}<br />
+                    {artifact.medium}<br />
+                    {artifact.location && <div>{artifact.location}</div>}
+                    <a href={artifact.metLink} target="_blank" rel="noopener noreferrer">
+                      View on Met →
+                    </a>
                   </div>
+              </div>
                 </div>
               ) : null
             ))}
